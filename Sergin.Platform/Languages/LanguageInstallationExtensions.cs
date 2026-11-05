@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sergin.Platform.Application.Languages;
 using Sergin.Platform.Application.Languages.Commands.GetList;
 using Sergin.Platform.Application.Languages.Commands.GetOne;
+using Sergin.Platform.Application.Localizations;
 using Sergin.Platform.Domain.Languages;
 using Sergin.Platform.Infrastructure.Languages.Repositories;
 using Sergin.Platform.Infrastructure.Languages.Repositories.Queries;
@@ -31,6 +32,9 @@ internal static class LanguageInstallationExtensions
 
         // Replace, not TryAdd: AddSerginCore registers SharedKernel's empty store before the module loop runs.
         services.Replace(ServiceDescriptor.Singleton<ITranslationStore, PlatformTranslationStore>());
+
+        // The handlers' after-commit cache refresh; a singleton over the singleton cache.
+        services.AddSingleton<TranslationCacheRefresher>();
 
         return services;
     }

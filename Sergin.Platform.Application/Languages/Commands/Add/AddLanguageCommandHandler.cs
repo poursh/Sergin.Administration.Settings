@@ -1,15 +1,15 @@
+using Sergin.Platform.Application.Localizations;
 using Sergin.Platform.Domain.Languages;
 using Sergin.SharedKernel.Application.Commands;
-using Sergin.SharedKernel.Application.Localizations;
 
 namespace Sergin.Platform.Application.Languages.Commands.Add;
 
 // The cache holds the language list from its first load on, so every language write refreshes it once the save has
-// committed.
+// committed, through TranslationCacheRefresher so a failing refresh never turns the saved write into an error.
 internal sealed class AddLanguageCommandHandler(
     IPlatformUnitOfWork unitOfWork,
     ILanguageRepository repository,
-    ITranslationCache cache) : ICommandHandler<AddLanguageCommand, AddLanguageCommandResponse>
+    TranslationCacheRefresher refresher) : ICommandHandler<AddLanguageCommand, AddLanguageCommandResponse>
 {
     public async Task<ErrorOr<AddLanguageCommandResponse>> Handle(AddLanguageCommand request, CancellationToken cancellationToken)
     {
@@ -23,7 +23,7 @@ internal sealed class AddLanguageCommandHandler(
         repository.Insert(language.Value);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        await cache.RefreshLanguagesAsync(cancellationToken);
+        await refresher.LanguagesChangedAsync();
 
         return new AddLanguageCommandResponse(language.Value.Id.Value);
     }

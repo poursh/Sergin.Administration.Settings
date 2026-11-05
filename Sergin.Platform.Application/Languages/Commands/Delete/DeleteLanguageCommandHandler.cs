@@ -1,6 +1,6 @@
+using Sergin.Platform.Application.Localizations;
 using Sergin.Platform.Domain.Languages;
 using Sergin.SharedKernel.Application.Commands;
-using Sergin.SharedKernel.Application.Localizations;
 
 namespace Sergin.Platform.Application.Languages.Commands.Delete;
 
@@ -9,7 +9,7 @@ namespace Sergin.Platform.Application.Languages.Commands.Delete;
 internal sealed class DeleteLanguageCommandHandler(
     IPlatformUnitOfWork unitOfWork,
     ILanguageRepository repository,
-    ITranslationCache cache) : ICommandHandler<DeleteLanguageCommand, DeleteLanguageCommandResponse>
+    TranslationCacheRefresher refresher) : ICommandHandler<DeleteLanguageCommand, DeleteLanguageCommandResponse>
 {
     public async Task<ErrorOr<DeleteLanguageCommandResponse>> Handle(DeleteLanguageCommand request, CancellationToken cancellationToken)
     {
@@ -23,7 +23,7 @@ internal sealed class DeleteLanguageCommandHandler(
         repository.Remove(language);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        await cache.RefreshLanguagesAsync(cancellationToken);
+        await refresher.LanguagesChangedAsync();
 
         return new DeleteLanguageCommandResponse(language.Id.Value);
     }

@@ -29,7 +29,7 @@ internal sealed class PlatformTranslationStore(IServiceScopeFactory scopeFactory
             ORDER BY culture;
             """;
 
-        IEnumerable<LanguageRow> rows = await connection.QueryAsync<LanguageRow>(query);
+        IEnumerable<LanguageRow> rows = await connection.QueryAsync<LanguageRow>(new CommandDefinition(query, cancellationToken: cancellationToken));
 
         return [.. rows.Select(row => row.ToLanguageInfo())];
     }

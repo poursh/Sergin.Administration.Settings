@@ -1,13 +1,13 @@
+using Sergin.Platform.Application.Localizations;
 using Sergin.Platform.Domain.Languages;
 using Sergin.SharedKernel.Application.Commands;
-using Sergin.SharedKernel.Application.Localizations;
 
 namespace Sergin.Platform.Application.Languages.Commands.Rename;
 
 internal sealed class RenameLanguageCommandHandler(
     IPlatformUnitOfWork unitOfWork,
     ILanguageRepository repository,
-    ITranslationCache cache) : ICommandHandler<RenameLanguageCommand, RenameLanguageCommandResponse>
+    TranslationCacheRefresher refresher) : ICommandHandler<RenameLanguageCommand, RenameLanguageCommandResponse>
 {
     public async Task<ErrorOr<RenameLanguageCommandResponse>> Handle(RenameLanguageCommand request, CancellationToken cancellationToken)
     {
@@ -21,7 +21,7 @@ internal sealed class RenameLanguageCommandHandler(
         language.Rename(request.DisplayName);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        await cache.RefreshLanguagesAsync(cancellationToken);
+        await refresher.LanguagesChangedAsync();
 
         return new RenameLanguageCommandResponse(language.Id.Value);
     }

@@ -1,13 +1,13 @@
+using Sergin.Platform.Application.Localizations;
 using Sergin.Platform.Domain.Languages;
 using Sergin.SharedKernel.Application.Commands;
-using Sergin.SharedKernel.Application.Localizations;
 
 namespace Sergin.Platform.Application.Languages.Commands.Unpublish;
 
 internal sealed class UnpublishLanguageCommandHandler(
     IPlatformUnitOfWork unitOfWork,
     ILanguageRepository repository,
-    ITranslationCache cache) : ICommandHandler<UnpublishLanguageCommand, UnpublishLanguageCommandResponse>
+    TranslationCacheRefresher refresher) : ICommandHandler<UnpublishLanguageCommand, UnpublishLanguageCommandResponse>
 {
     public async Task<ErrorOr<UnpublishLanguageCommandResponse>> Handle(UnpublishLanguageCommand request, CancellationToken cancellationToken)
     {
@@ -21,7 +21,7 @@ internal sealed class UnpublishLanguageCommandHandler(
         language.Unpublish();
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        await cache.RefreshLanguagesAsync(cancellationToken);
+        await refresher.LanguagesChangedAsync();
 
         return new UnpublishLanguageCommandResponse(language.Id.Value);
     }

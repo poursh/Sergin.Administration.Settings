@@ -34,9 +34,8 @@ internal sealed class LanguageQueryRepository(IDbConnectionFactory connectionFac
             """;
 
         IEnumerable<Versioned<LanguageQueryResponse>> rows = await connection.QueryAsync<LanguageRow, Guid, Versioned<LanguageQueryResponse>>(
-            query,
+            new CommandDefinition(query, new { Id = id.Value }, cancellationToken: cancellationToken),
             (row, rowVersion) => new Versioned<LanguageQueryResponse>(row.ToResponse(), RowVersion.Create(rowVersion)),
-            new { Id = id.Value },
             splitOn: "rowVersion");
 
         return rows.SingleOrDefault();
@@ -64,7 +63,7 @@ internal sealed class LanguageQueryRepository(IDbConnectionFactory connectionFac
 
         // The criteria text holds only ListColumns' expressions; every value is a parameter.
 #pragma warning disable S2077
-        GridReader res = await connection.QueryMultipleAsync(queries, parameters);
+        GridReader res = await connection.QueryMultipleAsync(new CommandDefinition(queries, parameters, cancellationToken: cancellationToken));
 #pragma warning restore S2077
 
         int count = await res.ReadSingleAsync<int>();
