@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Sergin.Platform.Application.Contracts\Sergin.Platform.Application.Contracts.csproj" />
+  </ItemGroup>
+</Project>

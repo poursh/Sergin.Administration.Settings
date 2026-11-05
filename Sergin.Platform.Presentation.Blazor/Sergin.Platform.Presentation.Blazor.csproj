@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+
+		<PackageReference Include="MudBlazor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\SharedKernel\Sergin.SharedKernel.Modules\Sergin.SharedKernel.Modules.csproj" />
+		<ProjectReference Include="..\..\..\SharedKernel\Sergin.SharedKernel.Presentation.Blazor\Sergin.SharedKernel.Presentation.Blazor.csproj" />
+		<ProjectReference Include="..\Sergin.Platform.Application.Configurations\Sergin.Platform.Application.Configurations.csproj" />
+		<ProjectReference Include="..\Sergin.Platform.Application.Contracts\Sergin.Platform.Application.Contracts.csproj" />
+	</ItemGroup>
+</Project>
