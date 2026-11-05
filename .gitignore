@@ -184,6 +184,10 @@ DocProject/Help/html
 
 # Click-Once directory
 publish/
+# A Publish feature slice (Languages/Commands/Publish/, Languages/Endpoints/Publish/) is source, not publish output;
+# git matches the rule above case-insensitively on Windows.
+!**/Commands/Publish/
+!**/Endpoints/Publish/
 
 # Publish Web Output
 *.[Pp]ublish.xml
