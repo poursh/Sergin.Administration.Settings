@@ -87,6 +87,78 @@ namespace Sergin.Platform.Infrastructure.Data.Migrations
                         .HasAnnotation("Sergin:Audited", true)
                         .HasAnnotation("Sergin:Versioned", true);
                 });
+
+            modelBuilder.Entity("Sergin.Platform.Domain.Translations.Translation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at_utc");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("key");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("language_id");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("modified_at_utc");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("modified_by");
+
+                    b.Property<Guid>("RowVersion")
+                        .IsConcurrencyToken()
+                        .HasColumnType("uuid")
+                        .HasColumnName("row_version");
+
+                    b.Property<string>("SourceText")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("source_text");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)")
+                        .HasColumnName("text");
+
+                    b.HasKey("Id")
+                        .HasName("pk_translation");
+
+                    b.HasIndex("LanguageId", "Key")
+                        .IsUnique()
+                        .HasDatabaseName("ix_translation_language_id_key");
+
+                    b.ToTable("translation", "pf");
+
+                    b
+                        .HasAnnotation("Sergin:Audited", true)
+                        .HasAnnotation("Sergin:Versioned", true);
+                });
+
+            modelBuilder.Entity("Sergin.Platform.Domain.Translations.Translation", b =>
+                {
+                    b.HasOne("Sergin.Platform.Domain.Languages.Language", null)
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_translation_language_language_id");
+                });
 #pragma warning restore 612, 618
         }
     }

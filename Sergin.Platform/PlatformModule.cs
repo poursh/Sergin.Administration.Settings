@@ -8,6 +8,7 @@ using Sergin.Platform.Application.Contracts;
 using Sergin.Platform.Infrastructure.Data;
 using Sergin.Platform.Languages;
 using Sergin.Platform.Presentation.Blazor;
+using Sergin.Platform.Translations;
 using Sergin.SharedKernel.Infrastructure.Data.EFCore;
 using Sergin.SharedKernel.Modules;
 
@@ -36,9 +37,10 @@ public sealed class PlatformModule : ISerginWebApiModule, ISerginWebUiModule
         services.AddModuleDbContext<PlatformDbContext, IPlatformDbContext, IPlatformUnitOfWork>(configuration, PlatformDbContext.Schema);
 
         services.AddLanguageDependencies();
+        services.AddTranslationDependencies();
     }
 
     public Task MigrateAsync(IServiceProvider services) => services.MigrateDbContextAsync<PlatformDbContext>();
 
-    public void MapEndpoints(RouteGroupBuilder group) => group.MapLanguageEndpoints();
+    public void MapEndpoints(RouteGroupBuilder group) => group.MapLanguageEndpoints().MapTranslationEndpoints();
 }

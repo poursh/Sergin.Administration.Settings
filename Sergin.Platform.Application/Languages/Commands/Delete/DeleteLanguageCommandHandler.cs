@@ -4,8 +4,9 @@ using Sergin.SharedKernel.Application.Commands;
 
 namespace Sergin.Platform.Application.Languages.Commands.Delete;
 
-// A hard delete: Language is not soft-deletable, so its culture is free again at once. Its translations go in the
-// same save once the Translation aggregate exists.
+// A hard delete: Language is not soft-deletable, so its culture is free again at once. Its translations go in the same
+// statement, through the cascading foreign key from pf.translation, and the culture's cache entry is refreshed (to
+// nothing) with the language list.
 internal sealed class DeleteLanguageCommandHandler(
     IPlatformUnitOfWork unitOfWork,
     ILanguageRepository repository,
@@ -24,6 +25,7 @@ internal sealed class DeleteLanguageCommandHandler(
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         await refresher.LanguagesChangedAsync();
+        await refresher.TranslationsChangedAsync(language.Culture.Value);
 
         return new DeleteLanguageCommandResponse(language.Id.Value);
     }

@@ -25,4 +25,24 @@ internal sealed class TranslationCacheRefresher(ITranslationCache cache, ILogger
                 exception, "Refreshing the language list after a saved language write failed; it is reloaded on the next request.");
         }
     }
+
+    /// <summary>
+    /// After a translation write, or a language delete: reloads <paramref name="culture"/>'s translations, or forgets them
+    /// when the reload fails.
+    /// </summary>
+    public async Task TranslationsChangedAsync(string culture)
+    {
+        try
+        {
+            await cache.RefreshAsync(culture, CancellationToken.None);
+        }
+        catch (Exception exception)
+        {
+            cache.Invalidate(culture);
+            logger.LogWarning(
+                exception,
+                "Refreshing the translations of {Culture} after a saved translation write failed; they are reloaded on the next request.",
+                culture);
+        }
+    }
 }
