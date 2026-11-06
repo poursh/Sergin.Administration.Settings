@@ -57,7 +57,7 @@ public class Language : AggregateRoot<LanguageId>
     {
         LanguageDirection.LeftToRight => false,
         LanguageDirection.RightToLeft => true,
-        _ => CultureInfo.GetCultureInfo(culture).TextInfo.IsRightToLeft,
+        _ => CultureIsRightToLeft(culture),
     };
 
     public void Rename(LanguageDisplayName displayName) => DisplayName = displayName;
@@ -69,6 +69,20 @@ public class Language : AggregateRoot<LanguageId>
 
     /// <summary>Takes the language back to a draft, which only translators see. Unpublishing a draft changes nothing.</summary>
     public void Unpublish() => Status = LanguageStatus.Draft;
+
+    // A stored culture this machine's ICU cannot build (a row written on another host) reads left to right rather than
+    // failing every read of the language list.
+    private static bool CultureIsRightToLeft(string culture)
+    {
+        try
+        {
+            return CultureInfo.GetCultureInfo(culture).TextInfo.IsRightToLeft;
+        }
+        catch (CultureNotFoundException)
+        {
+            return false;
+        }
+    }
 }
 
 public sealed record LanguageId(Guid Value);

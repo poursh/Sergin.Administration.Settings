@@ -28,6 +28,6 @@ Two aggregates, `Language` and `Translation`, with their write slices, reads and
 ## Conventions specific to this module
 
 - Feature folders may carry a feature level above the aggregate (`Localization/Languages/...`) — a feature's aggregates are its text categories (`platform.languages.*`, `platform.translations.*`).
-- Permissions are not scoped and named `permission.pf.<resource>.<action>` (`permission.pf.languages.read`).
+- Permissions are not scoped and named `permission.pf.<resource>.<action>` (`permission.pf.languages.read`). `LanguageAggregateFeatureConfiguration` and `TranslationAggregateFeatureConfiguration` register them next to `.Texts(<Aggregate>Texts.Category)`. **Declare `Texts(...)` together with `Permissions(...)`**: a permission's label key follows the root's text category once the root names one (`<category>.permissions.<action>`) and falls back to `<module>.<resource>.permissions.<action>` until it does, so adding `Texts(...)` later moves every label key of the aggregate and orphans their stored translations.
 - Every page route starts with `/pf/`; the host refuses to start otherwise.
 - Composing the module into a host takes **two** `ProjectReference`s — `Sergin.Platform` and `Sergin.Platform.Presentation.Blazor` (static web assets do not flow through the plain-SDK composition root) — and one `new PlatformModule()` in the host's modules collection.
