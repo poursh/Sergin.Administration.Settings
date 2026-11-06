@@ -11,7 +11,7 @@ Sergin is a .NET 10 modular monolith. Its host, [Sergin.MeterMinder](https://git
 
 ## What belongs here
 
-Settings features: localization first (languages and their translations), and later settings, operational monitors and the like. Business features (meters, devices, customers) never do, and identity and access stay in [Sergin.Administration.UserAccess](https://github.com/poursh/Sergin.Administration.UserAccess).
+Settings features: localization first (languages and their translations), and later settings. Operational monitors belong in a future sibling module, `Sergin.Administration.Monitoring`, not here. Business features (meters, devices, customers) never do, and identity and access stay in [Sergin.Administration.UserAccess](https://github.com/poursh/Sergin.Administration.UserAccess).
 
 The module is named `Settings`, not `System`: a `Sergin.System.*` namespace would capture every `System.*` reference inside it, and the `sys` permission prefix is reserved for SharedKernel.
 
