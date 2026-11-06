@@ -2,13 +2,16 @@ using System.Reflection;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sergin.Platform.Application;
 using Sergin.Platform.Application.Configurations;
 using Sergin.Platform.Application.Contracts;
 using Sergin.Platform.Infrastructure.Data;
+using Sergin.Platform.Infrastructure.Translations;
 using Sergin.Platform.Languages;
 using Sergin.Platform.Presentation.Blazor;
 using Sergin.Platform.Translations;
+using Sergin.SharedKernel.Application.Localizations;
 using Sergin.SharedKernel.Infrastructure.Data.EFCore;
 using Sergin.SharedKernel.Modules;
 
@@ -38,6 +41,9 @@ public sealed class PlatformModule : ISerginWebApiModule, ISerginWebUiModule
 
         services.AddLanguageDependencies();
         services.AddTranslationDependencies();
+
+        // SharedKernel registered the deny-all answer first; the module owning translations supplies the real one.
+        services.Replace(ServiceDescriptor.Scoped<IDraftLanguagePreviewPolicy, TranslatorDraftPreviewPolicy>());
     }
 
     public Task MigrateAsync(IServiceProvider services) => services.MigrateDbContextAsync<PlatformDbContext>();
