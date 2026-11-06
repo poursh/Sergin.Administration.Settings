@@ -53,7 +53,7 @@
                 else if (canEdit)
                 {
                     <MudTooltip Text="@Localizer.Text(CommonTexts.Edit)">
-                        <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Small" Disabled="saving" OnClick="@(() => StartEditAsync(context))" aria-label="@Localizer.Text(CommonTexts.Edit)" />
+                        <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Small" Disabled="@(saving || editing is not null)" OnClick="@(() => StartEditAsync(context))" aria-label="@Localizer.Text(CommonTexts.Edit)" />
                     </MudTooltip>
                 }
             </RowCommands>

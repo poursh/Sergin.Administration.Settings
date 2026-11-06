@@ -160,6 +160,12 @@ public sealed partial class TranslationListView
         appliedCategory = filterModule is null ? null : filterCategory;
         appliedStatus = filterStatus;
 
+        return AppliedChips();
+    }
+
+    // The chips of the applied values, which the load sends: built on Apply, and again when a removal clears another.
+    private IReadOnlyList<SerginAppliedFilter> AppliedChips()
+    {
         List<SerginAppliedFilter> filters = [];
 
         if (appliedModule is { } module)
@@ -188,7 +194,7 @@ public sealed partial class TranslationListView
     private string Chip(FieldText field, string value) =>
         Localizer.Text(TranslationTexts.FilterChip, new { Field = Localizer.Text(field.Label), Value = value });
 
-    // A category belongs to its module, so removing the module filter takes the category with it.
+    // A category belongs to its module, so removing the module filter takes the category, and its chip, with it.
     private void OnFilterRemoved(SerginAppliedFilter filter)
     {
         switch (filter.Id)
@@ -197,6 +203,7 @@ public sealed partial class TranslationListView
                 appliedModule = filterModule = null;
                 appliedCategory = filterCategory = null;
                 categories = [];
+                list.SetFilters(AppliedChips());
                 break;
             case nameof(GetTranslationListQueryCommand.Category):
                 appliedCategory = filterCategory = null;
@@ -266,6 +273,10 @@ public sealed partial class TranslationListView
             {
                 await ReloadRowVersionAsync(new TranslationId(stale));
             }
+            else if (item.TranslationId is null && errors.Any(error => error.Code == nameof(AddTranslationCommand.Key)))
+            {
+                await SwitchToChangeAsync(item);
+            }
 
             return;
         }
@@ -289,6 +300,25 @@ public sealed partial class TranslationListView
             await Dispatcher.SendVersionedAsync(new ChangeTranslationCommand(id, draft), editingVersion);
 
         return result.IsError ? result.Errors : null;
+    }
+
+    // Someone translated the text after this row was opened as untranslated, so the add is refused as already
+    // translated. The row is looked up again by its key; when it now has a translation, the edit goes on as a change of
+    // it, at its version, keeping the user's text, as after a stale change.
+    private async Task SwitchToChangeAsync(GetTranslationListItem item)
+    {
+        ErrorOr<ListQueryResponse<GetTranslationListItem>> found = await Dispatcher.SendAsync(
+            new GetTranslationListQueryCommand(new LanguageId(LanguageId), Paggination.Create(50, 1), new Term(item.Key)));
+
+        if (found.IsError
+            || found.Value.Data.FirstOrDefault(row => string.Equals(row.Key, item.Key, StringComparison.Ordinal))
+                is not { TranslationId: { } id } current)
+        {
+            return;
+        }
+
+        editing = current;
+        await ReloadRowVersionAsync(new TranslationId(id));
     }
 
     // Someone saved the translation after this row was opened: take its new version and say what it reads now.

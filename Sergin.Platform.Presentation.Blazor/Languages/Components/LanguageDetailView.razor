@@ -19,6 +19,12 @@
             <SerginDetailField LabelText="LanguageTexts.Culture.Label" Value="@language.Culture" />
             <SerginDetailField LabelText="LanguageTexts.DisplayName.Label" Value="@language.DisplayName" />
             <SerginDetailField LabelText="LanguageTexts.Status.Label" Value="@Localizer.Text(LanguageLabels.Status(language.Status))" />
+            @if (!canManage)
+            {
+                <SerginDetailField LabelText="LanguageTexts.Direction.Label" Value="@DirectionShown" />
+            }
+            else
+            {
             <SerginDetailField LabelText="LanguageTexts.Direction.Label">
                 <MudSelect T="LanguageDirection" Value="language.Direction" ValueChanged="SetDirectionAsync" Disabled="busy"
                            ToStringFunc="@(direction => Localizer.Text(LanguageLabels.Direction(direction)))"
@@ -30,10 +36,11 @@
                     }
                 </MudSelect>
             </SerginDetailField>
+            }
         }
     </Fields>
     <Entities>
-        @if (language is not null)
+        @if (language is not null && canManage)
         {
             <MudForm @ref="form" Model="model" Validation="@validation" @bind-IsValid="isValid"
                      SuppressImplicitSubmission="false" onsubmit="@OnRename">

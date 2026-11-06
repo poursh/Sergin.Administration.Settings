@@ -14,6 +14,7 @@ using Sergin.Platform.Domain.Languages;
 using Sergin.Platform.Presentation.Blazor.Languages.Models;
 using Sergin.SharedKernel.Application.Aggregates;
 using Sergin.SharedKernel.Application.Concurrency;
+using Sergin.SharedKernel.Application.Securities.Authorization;
 using Sergin.SharedKernel.Domain;
 using Sergin.SharedKernel.Presentation.Blazor.Errors;
 using Sergin.SharedKernel.Presentation.Errors;
@@ -35,6 +36,7 @@ public sealed partial class LanguageDetailView
     private RowVersion? version;
     private SerginProblem? problem;
     private bool busy;
+    private bool canManage;
 
     private MudForm form = default!;
     private bool isValid;
@@ -60,6 +62,9 @@ public sealed partial class LanguageDetailView
 
     [Inject]
     private ICultureFormatter Formatter { get; set; } = default!;
+
+    [Inject]
+    private IScopeAuthorization ScopeAuthorization { get; set; } = default!;
 
     [CascadingParameter]
     private SerginViewHost Host { get; set; } = SerginViewHost.Unhosted;
@@ -98,7 +103,24 @@ public sealed partial class LanguageDetailView
 
     protected override void OnInitialized() => validation = FormValidator.RulesFor(ToRenameCommand);
 
+    // Presentation only: a reader sees the name and direction as text; the pipeline checks the same permission on
+    // every write. Languages belong to no scope.
+    protected override async Task OnInitializedAsync() =>
+        canManage = await ScopeAuthorization.CurrentUserHoldsAnywhereAsync(LanguagePermissions.Manage);
+
     protected override Task OnParametersSetAsync() => LoadAsync();
+
+    // The setting, and for the culture's own direction what it gives: "From the culture (Right to left)".
+    private string DirectionShown => language switch
+    {
+        null => string.Empty,
+        { Direction: LanguageDirection.FromCulture } => Localizer.Text(LanguageTexts.DirectionResolved, new
+        {
+            Setting = Localizer.Text(LanguageTexts.FromCulture),
+            Resolved = Localizer.Text(language.IsRightToLeft ? LanguageTexts.RightToLeft : LanguageTexts.LeftToRight),
+        }),
+        _ => Localizer.Text(LanguageLabels.Direction(language.Direction)),
+    };
 
     private Task<ErrorOr<AuditInfo>> LoadAuditAsync() => Dispatcher.SendAsync(new GetLanguageAuditQueryCommand(Id));
 

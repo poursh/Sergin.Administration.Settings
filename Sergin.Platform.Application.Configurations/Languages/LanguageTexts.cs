@@ -63,6 +63,9 @@ public static class LanguageTexts
 
     public static readonly TextDefinition RightToLeft = directions.Text("RightToLeft", "Right to left");
 
+    public static readonly TextDefinition DirectionResolved = directions.Text(
+        "Resolved", "{Setting} ({Resolved})", "A direction setting and the direction it gives, as in: From the culture (Right to left).");
+
     public static readonly TextDefinition Draft = statuses.Text("Draft", "Draft", "A language only translators see.");
 
     public static readonly TextDefinition Published = statuses.Text("Published", "Published", "A language every user may choose.");

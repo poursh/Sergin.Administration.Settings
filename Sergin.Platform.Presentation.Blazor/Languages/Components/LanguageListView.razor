@@ -20,9 +20,12 @@
                 <MudTooltip Text="@Localizer.Text(LanguageTexts.Translations)">
                     <MudIconButton Icon="@Icons.Material.Outlined.Translate" Size="Size.Small" Href="@($"/pf/languages/{context.Id}/translations")" aria-label="@Localizer.Text(LanguageTexts.Translations)" />
                 </MudTooltip>
-                <MudTooltip Text="@Localizer.Text(CommonTexts.Delete)">
-                    <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="Size.Small" OnClick="@(() => DeleteAsync(context))" aria-label="@Localizer.Text(CommonTexts.Delete)" />
-                </MudTooltip>
+                @if (canManage)
+                {
+                    <MudTooltip Text="@Localizer.Text(CommonTexts.Delete)">
+                        <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="Size.Small" OnClick="@(() => DeleteAsync(context))" aria-label="@Localizer.Text(CommonTexts.Delete)" />
+                    </MudTooltip>
+                }
             </RowCommands>
         </SerginAggregateList>
     </ChildContent>

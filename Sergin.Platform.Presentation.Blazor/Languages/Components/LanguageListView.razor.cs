@@ -5,6 +5,7 @@ using Sergin.Platform.Application.Contracts.Languages.Commands.Delete;
 using Sergin.Platform.Application.Contracts.Languages.Commands.GetList;
 using Sergin.Platform.Application.Contracts.Languages.Commands.GetOne;
 using Sergin.SharedKernel.Application.Concurrency;
+using Sergin.SharedKernel.Application.Securities.Authorization;
 using Sergin.SharedKernel.Presentation.Blazor.Errors;
 
 namespace Sergin.Platform.Presentation.Blazor.Languages.Components;
@@ -13,6 +14,7 @@ namespace Sergin.Platform.Presentation.Blazor.Languages.Components;
 public sealed partial class LanguageListView
 {
     private SerginAggregateList<GetLanguageListItem> list = default!;
+    private bool canManage;
 
     private IReadOnlyList<SerginBreadcrumb> Trail { get; } = [SerginBreadcrumb.Of(PlatformNavigation.Languages)];
 
@@ -34,6 +36,13 @@ public sealed partial class LanguageListView
 
     [Inject]
     private IDialogService DialogService { get; set; } = default!;
+
+    [Inject]
+    private IScopeAuthorization ScopeAuthorization { get; set; } = default!;
+
+    // Presentation only: the pipeline checks the same permission on the delete. Languages belong to no scope.
+    protected override async Task OnInitializedAsync() =>
+        canManage = await ScopeAuthorization.CurrentUserHoldsAnywhereAsync(LanguagePermissions.Manage);
 
     private Task<ErrorOr<ListQueryResponse<GetLanguageListItem>>> LoadAsync(SerginListRequest request, CancellationToken cancellationToken) =>
         Dispatcher.SendAsync(new GetLanguageListQueryCommand(request.Paggination, request.Term, request.Filtering, request.Sorting), cancellationToken);
