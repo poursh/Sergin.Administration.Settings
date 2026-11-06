@@ -41,7 +41,7 @@ The usual Sergin layering, one project per layer:
 
 ## This repository does not build on its own
 
-It is **embed-only**, like Sergin.Administration.UserAccess: there is no solution file and no `Directory.Build.props` or `Directory.Packages.props` here. It compiles only as a git submodule at `src/Modules/Administration/Settings/` inside a host repository that also mounts [Sergin.SharedKernel](https://github.com/poursh/Sergin.SharedKernel) at `src/SharedKernel/`. Build and test through the host (on Windows run `git config --global core.longpaths true` first, since one path in the sibling UserAccess module exceeds 260 characters):
+It is **embed-only**, like Sergin.Administration.UserAccess: there is no solution file and no `Directory.Build.props` or `Directory.Packages.props` here. It compiles only as a git submodule at `src/Modules/Administration/Settings/` inside a host repository that also mounts [Sergin.SharedKernel](https://github.com/poursh/Sergin.SharedKernel) at `src/SharedKernel/`. Build and test through the host (on Windows run `git config --global core.longpaths true` first, since some paths in the sibling UserAccess module exceed 260 characters):
 
 ```bash
 git clone --recurse-submodules https://github.com/poursh/Sergin.MeterMinder.git
