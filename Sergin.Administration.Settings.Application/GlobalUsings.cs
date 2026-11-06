@@ -1,0 +1,11 @@
+global using ErrorOr;
+global using Sergin.SharedKernel.Domain;
+global using Sergin.SharedKernel.Application;
+global using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Add;
+global using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Delete;
+global using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.GetList;
+global using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.GetOne;
+global using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Publish;
+global using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Rename;
+global using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.SetDirection;
+global using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Unpublish;

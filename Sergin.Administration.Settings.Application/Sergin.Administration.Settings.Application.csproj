@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\SharedKernel\Sergin.SharedKernel.Application\Sergin.SharedKernel.Application.csproj" />
+    <ProjectReference Include="..\Sergin.Administration.Settings.Domain\Sergin.Administration.Settings.Domain.csproj" />
+    <ProjectReference Include="..\Sergin.Administration.Settings.Application.Configurations\Sergin.Administration.Settings.Application.Configurations.csproj" />
+    <ProjectReference Include="..\Sergin.Administration.Settings.Application.Contracts\Sergin.Administration.Settings.Application.Contracts.csproj" />
+  </ItemGroup>
+</Project>
