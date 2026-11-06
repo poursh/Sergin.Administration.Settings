@@ -4,10 +4,12 @@ using Sergin.Platform.Application.Contracts.Languages.Commands.GetOne;
 using Sergin.Platform.Application.Languages;
 using Sergin.Platform.Domain.Languages;
 using Sergin.SharedKernel.Application;
+using Sergin.SharedKernel.Application.Aggregates;
 using Sergin.SharedKernel.Application.Commands.Queries;
 using Sergin.SharedKernel.Application.Concurrency;
 using Sergin.SharedKernel.Domain;
 using Sergin.SharedKernel.Infrastracture.Data;
+using Sergin.SharedKernel.Infrastructure.Data.EFCore.Aggregates;
 using Sergin.SharedKernel.Infrastructure.Data.EFCore.Queries;
 
 namespace Sergin.Platform.Infrastructure.Languages.Repositories.Queries;
@@ -70,5 +72,21 @@ internal sealed class LanguageQueryRepository(IDbConnectionFactory connectionFac
         IReadOnlyCollection<GetLanguageListItem> list = [.. (await res.ReadAsync<LanguageRow>()).Select(row => row.ToListItem())];
 
         return new ListQueryResponse<GetLanguageListItem>(list, count);
+    }
+
+    // A language belongs to no scope, so the dialog shows it as global.
+    public async Task<AuditInfo?> GetLanguageAuditAsync(LanguageId id, CancellationToken cancellationToken = default)
+    {
+        using DbConnection connection = await connectionFactory.CreateConnectionAsync();
+
+        const string query =
+            $$"""
+            SELECT {{AuditColumns.SelectSql}}, {{ScopeColumns.UnscopedSelectSql}}
+            FROM pf.language
+            WHERE id = @Id;
+            """;
+
+        return await connection.QuerySingleOrDefaultAsync<AuditInfo>(
+            new CommandDefinition(query, new { Id = id.Value }, cancellationToken: cancellationToken));
     }
 }

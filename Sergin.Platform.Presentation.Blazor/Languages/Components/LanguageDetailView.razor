@@ -1,0 +1,53 @@
+<SerginAggregateDetailView TitleText="LanguageTexts.Singular" Trail="Trail" Problem="problem" Ready="@(language is not null)" Actions="Actions"
+                           FieldsTitleData="@language?.DisplayName">
+    <HeaderActions>
+        <SerginReloadButton OnReload="LoadAsync" />
+        <SerginCopyLinkButton />
+        @if (language is not null)
+        {
+            <SerginInfoButton Load="LoadAuditAsync" Version="version" />
+        }
+    </HeaderActions>
+    <Overview>
+        <SerginOverviewCards>
+            <SerginOverviewCard LabelText="LanguageTexts.OverviewTranslated" ValueData="@Percent" CaptionData="@ProgressCaption" />
+        </SerginOverviewCards>
+    </Overview>
+    <Fields>
+        @if (language is not null)
+        {
+            <SerginDetailField LabelText="LanguageTexts.Culture.Label" Value="@language.Culture" />
+            <SerginDetailField LabelText="LanguageTexts.DisplayName.Label" Value="@language.DisplayName" />
+            <SerginDetailField LabelText="LanguageTexts.Status.Label" Value="@Localizer.Text(LanguageLabels.Status(language.Status))" />
+            <SerginDetailField LabelText="LanguageTexts.Direction.Label">
+                <MudSelect T="LanguageDirection" Value="language.Direction" ValueChanged="SetDirectionAsync" Disabled="busy"
+                           ToStringFunc="@(direction => Localizer.Text(LanguageLabels.Direction(direction)))"
+                           HelperText="@Localizer.Text(language.IsRightToLeft ? LanguageTexts.RightToLeft : LanguageTexts.LeftToRight)"
+                           Variant="Variant.Outlined" Margin="Margin.Dense" aria-label="@Localizer.Text(LanguageTexts.Direction.Label)">
+                    @foreach (LanguageDirection direction in LanguageLabels.Directions)
+                    {
+                        <MudSelectItem T="LanguageDirection" Value="direction">@Localizer.Text(LanguageLabels.Direction(direction))</MudSelectItem>
+                    }
+                </MudSelect>
+            </SerginDetailField>
+        }
+    </Fields>
+    <Entities>
+        @if (language is not null)
+        {
+            <MudForm @ref="form" Model="model" Validation="@validation" @bind-IsValid="isValid"
+                     SuppressImplicitSubmission="false" onsubmit="@OnRename">
+                <MudCard Outlined="true" Class="mb-4">
+                    <MudCardContent>
+                        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.DisplayName" Label="@Localizer.Text(LanguageTexts.DisplayName.Label)"
+                                      For="@(() => model.DisplayName)" Immediate="true" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                                   Color="Color.Primary" Disabled="@(busy || !isValid)">@Localizer.Text(CommonTexts.Rename)</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudForm>
+        }
+    </Entities>
+</SerginAggregateDetailView>

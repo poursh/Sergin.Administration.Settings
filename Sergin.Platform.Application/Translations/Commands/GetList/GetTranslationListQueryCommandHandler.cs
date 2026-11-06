@@ -58,5 +58,5 @@ internal sealed class GetTranslationListQueryCommandHandler(
         string.Equals(itemCategory, category, StringComparison.Ordinal)
         || itemCategory.StartsWith(category + SerginStringKey.Separator, StringComparison.Ordinal);
 
-    private static bool Contains(string value, string term) => value.Contains(term, StringComparison.CurrentCultureIgnoreCase);
+    private static bool Contains(string value, string term) => value.Contains(term, StringComparison.OrdinalIgnoreCase);
 }

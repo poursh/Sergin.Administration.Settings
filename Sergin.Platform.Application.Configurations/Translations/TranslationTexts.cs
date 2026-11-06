@@ -35,6 +35,26 @@ public static class TranslationTexts
     public static readonly TextDefinition Progress =
         Category.Text("Progress", "{Translated} of {Total} translated", "How many of the declared texts a language translates.");
 
+    public static readonly TextDefinition SearchPlaceholder =
+        Category.Text("SearchPlaceholder", "Search key, default or translation…");
+
+    public static readonly TextDefinition FilterChip =
+        Category.Text("FilterChip", "{Field}: {Value}", "An applied filter: the field's label, then the chosen value.");
+
+    public static readonly TextDefinition Saved = Category.Text("Saved", "Translation saved.");
+
+    public static readonly TextDefinition ChangedMeanwhile = Category.Text(
+        "ChangedMeanwhile",
+        "Someone changed this translation after you opened it; it now reads: {Text}. Save again to replace it with yours.",
+        "{Text} is the stored translation, shown as it is.");
+
+    public static readonly TextDefinition DeleteTitle = Category.Text("DeleteTitle", "Delete translation");
+
+    public static readonly TextDefinition DeleteConfirm = Category.Text(
+        "DeleteConfirm",
+        "Delete the translation of {Key}? The application no longer declares this text.",
+        "{Key} is the text's key, shown as it is.");
+
     public static readonly TextDefinition Untranslated =
         statuses.Text("Untranslated", "Untranslated", "No translation yet: the English default is shown.");
 

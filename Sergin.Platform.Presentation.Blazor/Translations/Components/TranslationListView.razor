@@ -1,0 +1,94 @@
+<SerginAggregateListView TitleText="TranslationTexts.Title" Trail="Trail">
+    <HeaderActions>
+        <SerginReloadButton OnReload="ReloadAsync" />
+    </HeaderActions>
+    <ChildContent>
+        <SerginAggregateList @ref="list" TItem="GetTranslationListItem" Load="LoadAsync" SearchPlaceholderText="TranslationTexts.SearchPlaceholder" RowsPerPage="25"
+                             BuildFilters="BuildFilters" OnFilterRemoved="OnFilterRemoved" OnFiltersReset="ResetFilterFields">
+            <HeaderContent>
+                <MudTh>@Localizer.Text(TranslationTexts.Key.Label)</MudTh>
+                <MudTh>@Localizer.Text(TranslationTexts.Default.Label)</MudTh>
+                <MudTh>@Localizer.Text(TranslationTexts.Text.Label)</MudTh>
+                <MudTh>@Localizer.Text(TranslationTexts.Status.Label)</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="@Localizer.Text(TranslationTexts.Key.Label)"><code class="sergin-translation-key">@context.Key</code></MudTd>
+                <MudTd DataLabel="@Localizer.Text(TranslationTexts.Default.Label)">@context.Default</MudTd>
+                <MudTd DataLabel="@Localizer.Text(TranslationTexts.Text.Label)" Style="min-width: 16rem;">
+                    @if (IsEditing(context))
+                    {
+                        <MudTextField T="string" @bind-Value="draft" Variant="Variant.Outlined" Margin="Margin.Dense" Lines="2" Sizing="InputSizing.Auto" Immediate="true"
+                                      Disabled="saving" dir="@Direction" aria-label="@Localizer.Text(TranslationTexts.Text.Label)" />
+                    }
+                    else if (context.Text is { } text)
+                    {
+                        <span dir="@Direction">@text</span>
+                    }
+                    else
+                    {
+                        <span>–</span>
+                    }
+                </MudTd>
+                <MudTd DataLabel="@Localizer.Text(TranslationTexts.Status.Label)">
+                    <MudText Typo="Typo.body2" Color="@StatusColor(context.Status)">@Localizer.Text(StatusText(context.Status))</MudText>
+                </MudTd>
+            </RowTemplate>
+            <RowCommands>
+                @* The commands write; a reader without the edit permission sees the list only. *@
+                @if (canEdit && IsEditing(context))
+                {
+                    <MudTooltip Text="@Localizer.Text(CommonTexts.Save)">
+                        <MudIconButton Icon="@Icons.Material.Outlined.Check" Size="Size.Small" Color="Color.Primary" Disabled="saving" OnClick="SaveAsync" aria-label="@Localizer.Text(CommonTexts.Save)" />
+                    </MudTooltip>
+                    <MudTooltip Text="@Localizer.Text(CommonTexts.Cancel)">
+                        <MudIconButton Icon="@Icons.Material.Outlined.Close" Size="Size.Small" Disabled="saving" OnClick="CancelEdit" aria-label="@Localizer.Text(CommonTexts.Cancel)" />
+                    </MudTooltip>
+                }
+                else if (canEdit && context.Status == TranslationStatus.Orphaned)
+                {
+                    <MudTooltip Text="@Localizer.Text(CommonTexts.Delete)">
+                        <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="Size.Small" OnClick="@(() => DeleteAsync(context))" aria-label="@Localizer.Text(CommonTexts.Delete)" />
+                    </MudTooltip>
+                }
+                else if (canEdit)
+                {
+                    <MudTooltip Text="@Localizer.Text(CommonTexts.Edit)">
+                        <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Small" Disabled="saving" OnClick="@(() => StartEditAsync(context))" aria-label="@Localizer.Text(CommonTexts.Edit)" />
+                    </MudTooltip>
+                }
+            </RowCommands>
+            <FilterPanel>
+                <MudGrid Spacing="3">
+                    <MudItem xs="12" sm="4">
+                        <MudSelect T="string" Label="@Localizer.Text(TranslationTexts.Module.Label)" Value="filterModule" ValueChanged="OnFilterModuleChanged"
+                                   Clearable="true" Variant="Variant.Outlined" Margin="Margin.Dense">
+                            @foreach (string module in modules)
+                            {
+                                <MudSelectItem T="string" Value="@module">@module</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="4">
+                        <MudSelect T="string" Label="@Localizer.Text(TranslationTexts.CategoryField.Label)" @bind-Value="filterCategory" Disabled="@(filterModule is null)"
+                                   Clearable="true" Variant="Variant.Outlined" Margin="Margin.Dense">
+                            @foreach (string category in categories)
+                            {
+                                <MudSelectItem T="string" Value="@category">@category</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="4">
+                        <MudSelect T="TranslationStatus?" Label="@Localizer.Text(TranslationTexts.Status.Label)" @bind-Value="filterStatus" Clearable="true"
+                                   ToStringFunc="@(status => status is { } value ? Localizer.Text(StatusText(value)) : string.Empty)"
+                                   Variant="Variant.Outlined" Margin="Margin.Dense">
+                            @foreach (TranslationStatus status in Statuses)
+                            {
+                                <MudSelectItem T="TranslationStatus?" Value="@status">@Localizer.Text(StatusText(status))</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            </FilterPanel>
+        </SerginAggregateList>
+    </ChildContent>
+</SerginAggregateListView>

@@ -1,0 +1,29 @@
+<SerginAggregateListView TitleText="LanguageTexts.Title" Trail="Trail" Actions="Actions">
+    <HeaderActions>
+        <SerginReloadButton OnReload="ReloadAsync" />
+    </HeaderActions>
+    <ChildContent>
+        <SerginAggregateList @ref="list" TItem="GetLanguageListItem" Load="LoadAsync" SearchPlaceholderText="LanguageTexts.SearchPlaceholder">
+            <HeaderContent>
+                <MudTh><MudTableSortLabel T="GetLanguageListItem" SortLabel="@LanguageListFields.Culture">@Localizer.Text(LanguageTexts.Culture.Label)</MudTableSortLabel></MudTh>
+                <MudTh>@Localizer.Text(LanguageTexts.DisplayName.Label)</MudTh>
+                <MudTh>@Localizer.Text(LanguageTexts.Direction.Label)</MudTh>
+                <MudTh>@Localizer.Text(LanguageTexts.Status.Label)</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="@Localizer.Text(LanguageTexts.Culture.Label)"><MudLink Href="@($"/pf/languages/{context.Id}")">@context.Culture</MudLink></MudTd>
+                <MudTd DataLabel="@Localizer.Text(LanguageTexts.DisplayName.Label)">@context.DisplayName</MudTd>
+                <MudTd DataLabel="@Localizer.Text(LanguageTexts.Direction.Label)">@Localizer.Text(context.IsRightToLeft ? LanguageTexts.RightToLeft : LanguageTexts.LeftToRight)</MudTd>
+                <MudTd DataLabel="@Localizer.Text(LanguageTexts.Status.Label)">@Localizer.Text(LanguageLabels.Status(context.Status))</MudTd>
+            </RowTemplate>
+            <RowCommands>
+                <MudTooltip Text="@Localizer.Text(LanguageTexts.Translations)">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Translate" Size="Size.Small" Href="@($"/pf/languages/{context.Id}/translations")" aria-label="@Localizer.Text(LanguageTexts.Translations)" />
+                </MudTooltip>
+                <MudTooltip Text="@Localizer.Text(CommonTexts.Delete)">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="Size.Small" OnClick="@(() => DeleteAsync(context))" aria-label="@Localizer.Text(CommonTexts.Delete)" />
+                </MudTooltip>
+            </RowCommands>
+        </SerginAggregateList>
+    </ChildContent>
+</SerginAggregateListView>

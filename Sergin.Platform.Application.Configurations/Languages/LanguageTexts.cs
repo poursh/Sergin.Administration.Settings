@@ -17,6 +17,8 @@ public static class LanguageTexts
 
     private static readonly TextCategory errors = Category.Child("Errors");
 
+    private static readonly TextCategory overview = Category.Child("Overview");
+
     public static readonly FieldText Culture = Category.Field("Culture", "Culture", hint: "A culture code such as fa-IR.");
 
     public static readonly FieldText DisplayName =
@@ -31,6 +33,28 @@ public static class LanguageTexts
     public static readonly TextDefinition Singular = Category.Text("Singular", "Language");
 
     public static readonly TextDefinition New = Category.Text("New", "New language");
+
+    public static readonly TextDefinition SearchPlaceholder = Category.Text("SearchPlaceholder", "Search culture or name…");
+
+    public static readonly TextDefinition Publish = Category.Text("Publish", "Publish", "Offers a draft language to every user.");
+
+    public static readonly TextDefinition Unpublish =
+        Category.Text("Unpublish", "Unpublish", "Takes a published language back to a draft only translators see.");
+
+    public static readonly TextDefinition DeleteTitle = Category.Text("DeleteTitle", "Delete language");
+
+    public static readonly TextDefinition DeleteConfirm = Category.Text(
+        "DeleteConfirm",
+        "Delete {DisplayName} and all its translations? Its users see English again.",
+        "{DisplayName} is the language's own name for itself.");
+
+    public static readonly TextDefinition Translations =
+        Category.Text("Translations", "Translations", "Opens the list of a language's translations.");
+
+    public static readonly TextDefinition OverviewTranslated = overview.Text("Translated", "Translated");
+
+    public static readonly TextDefinition OverviewPercent =
+        overview.Text("Percent", "{Percent}%", "The share of the declared texts a language translates; {Percent} is a whole number.");
 
     public static readonly TextDefinition FromCulture =
         directions.Text("FromCulture", "From the culture", "The direction the culture itself is written in.");
