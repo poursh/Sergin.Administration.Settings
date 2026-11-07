@@ -12,6 +12,8 @@ public static class TranslationUiTexts
 
     private static readonly TextCategory statuses = category.Child("Statuses");
 
+    private static readonly TextCategory origins = category.Child("Origins");
+
     public static readonly TextDefinition Title = category.Text("Title", "Translations");
 
     public static readonly TextDefinition Progress =
@@ -47,4 +49,10 @@ public static class TranslationUiTexts
 
     public static readonly TextDefinition Orphaned =
         statuses.Text("Orphaned", "Orphaned", "The text no longer exists in the application; the translation is never shown.");
+
+    public static readonly TextDefinition Screens =
+        origins.Text("Screens", "Screens", "Texts the pages show: titles, buttons, confirmations, menus.");
+
+    public static readonly TextDefinition Messages =
+        origins.Text("Messages", "Messages", "Field names, validation messages and error messages.");
 }
