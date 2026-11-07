@@ -33,6 +33,8 @@ public sealed class SettingsModule : ISerginWebApiModule, ISerginWebUiModule
 
     public SerginNavGroup NavGroup => SettingsNavigation.Group;
 
+    public TextDefinition NavCaption => SettingsUiTexts.MenuTitle;
+
     public IReadOnlyCollection<SerginNavItem> NavItems => SettingsNavigation.Items;
 
     public void AddServices(IServiceCollection services, IConfigurationSection configuration)
