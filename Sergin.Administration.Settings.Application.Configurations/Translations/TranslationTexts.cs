@@ -3,8 +3,9 @@ using Sergin.SharedKernel.Application.Localizations;
 namespace Sergin.Administration.Settings.Application.Configurations.Translations;
 
 /// <summary>
-/// The Translation aggregate's texts: one field per command property and list column a person sees, the four
-/// statuses, the translation pages' titles, and its validators' messages.
+/// The Translation aggregate's texts: one field per command property and list column a person sees, its name, and its
+/// validators' messages. The statuses and the pages' texts are <c>TranslationUiTexts</c>, in the Blazor RCL, on this
+/// category.
 /// </summary>
 public static class TranslationTexts
 {

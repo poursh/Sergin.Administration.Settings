@@ -4,8 +4,8 @@ namespace Sergin.Administration.Settings.Application.Configurations.Languages;
 
 /// <summary>
 /// The Language aggregate's texts: one field per command property a person sees (a list column reads the field of its
-/// <c>LanguageListFields</c> id), the direction and status values, the language pages' titles, and the messages of its
-/// validators and domain errors (<c>LanguageErrorKeys</c> names the latter).
+/// <c>LanguageListFields</c> id), its name, and the messages of its validators and domain errors (<c>LanguageErrorKeys</c>
+/// names the latter). The texts only the pages show are <c>LanguageUiTexts</c>, in the Blazor RCL, on this category.
 /// </summary>
 public static class LanguageTexts
 {
