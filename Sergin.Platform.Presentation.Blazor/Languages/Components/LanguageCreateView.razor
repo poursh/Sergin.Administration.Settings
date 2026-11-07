@@ -1,7 +1,0 @@
-<SerginFormView TitleText="LanguageTexts.New" Trail="Trail"
-                Model="model" Validation="validation" OnSubmit="OnSubmit" Submitting="submitting" SubmitLabelText="CommonTexts.Create" CancelHref="/pf/languages">
-    <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.Culture" Label="@Localizer.Text(LanguageTexts.Culture.Label)"
-                  HelperText="@Hint(LanguageTexts.Culture)" For="@(() => model.Culture)" Immediate="true" />
-    <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.DisplayName" Label="@Localizer.Text(LanguageTexts.DisplayName.Label)"
-                  HelperText="@Hint(LanguageTexts.DisplayName)" For="@(() => model.DisplayName)" Immediate="true" />
-</SerginFormView>

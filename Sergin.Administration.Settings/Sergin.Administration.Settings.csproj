@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<ProjectReference Include="..\Sergin.Administration.Settings.Infrastructure\Sergin.Administration.Settings.Infrastructure.csproj" />
+		<ProjectReference Include="..\Sergin.Administration.Settings.Application.Configurations\Sergin.Administration.Settings.Application.Configurations.csproj" />
+		<ProjectReference Include="..\Sergin.Administration.Settings.Presentation.WebApi\Sergin.Administration.Settings.Presentation.WebApi.csproj" />
+		<ProjectReference Include="..\Sergin.Administration.Settings.Presentation.Blazor\Sergin.Administration.Settings.Presentation.Blazor.csproj" />
+		<ProjectReference Include="..\..\..\..\SharedKernel\Sergin.SharedKernel.Modules\Sergin.SharedKernel.Modules.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+</Project>
