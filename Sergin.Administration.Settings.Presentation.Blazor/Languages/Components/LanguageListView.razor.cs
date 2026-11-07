@@ -21,7 +21,7 @@ public sealed partial class LanguageListView
     // Languages belong to no scope, so the permission is checked on any scope, as the pipeline checks it.
     private IReadOnlyList<SerginPageAction> Actions { get; } =
     [
-        new(LanguageTexts.New, Icons.Material.Filled.Add, SerginActionKind.Primary, Href: "/st/languages/new",
+        new(LanguageUiTexts.New, Icons.Material.Filled.Add, SerginActionKind.Primary, Href: "/st/languages/new",
             Permission: LanguagePermissions.Manage, AnyScope: true),
     ];
 
@@ -52,7 +52,7 @@ public sealed partial class LanguageListView
     // The detail view's confirm and version rule: checked against the version read just before the delete.
     private async Task DeleteAsync(GetLanguageListItem item)
     {
-        if (!await DialogService.ConfirmDeleteAsync(Localizer, LanguageTexts.DeleteTitle, LanguageTexts.DeleteConfirm, new { item.DisplayName }))
+        if (!await DialogService.ConfirmDeleteAsync(Localizer, LanguageUiTexts.DeleteTitle, LanguageUiTexts.DeleteConfirm, new { item.DisplayName }))
         {
             return;
         }

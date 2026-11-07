@@ -14,7 +14,7 @@ public static class SettingsNavigation
     public static SerginNavGroup Group => SerginNavGroups.Administration;
 
     public static SerginNavItem Languages { get; } = new(
-        LanguageTexts.Title,
+        LanguageUiTexts.Title,
         "/st/languages",
         Icons.Material.Filled.Translate,
         Order: 300,

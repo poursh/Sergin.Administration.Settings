@@ -87,7 +87,7 @@ public sealed partial class TranslationListView
         language is null
             ? new(LanguageTexts.Singular, $"/st/languages/{LanguageId}")
             : SerginBreadcrumb.Data(language.DisplayName, $"/st/languages/{LanguageId}"),
-        new(TranslationTexts.Title),
+        new(TranslationUiTexts.Title),
     ];
 
     // The translations are shown in the language's own direction, which the page around them need not share.
@@ -108,10 +108,10 @@ public sealed partial class TranslationListView
 
     private static TextDefinition StatusText(TranslationStatus status) => status switch
     {
-        TranslationStatus.Translated => TranslationTexts.Translated,
-        TranslationStatus.NeedsReview => TranslationTexts.NeedsReview,
-        TranslationStatus.Orphaned => TranslationTexts.Orphaned,
-        _ => TranslationTexts.Untranslated,
+        TranslationStatus.Translated => TranslationUiTexts.Translated,
+        TranslationStatus.NeedsReview => TranslationUiTexts.NeedsReview,
+        TranslationStatus.Orphaned => TranslationUiTexts.Orphaned,
+        _ => TranslationUiTexts.Untranslated,
     };
 
     private static Color StatusColor(TranslationStatus status) => status switch
@@ -192,7 +192,7 @@ public sealed partial class TranslationListView
     }
 
     private string Chip(FieldText field, string value) =>
-        Localizer.Text(TranslationTexts.FilterChip, new { Field = Localizer.Text(field.Label), Value = value });
+        Localizer.Text(TranslationUiTexts.FilterChip, new { Field = Localizer.Text(field.Label), Value = value });
 
     // A category belongs to its module, so removing the module filter takes the category, and its chip, with it.
     private void OnFilterRemoved(SerginAppliedFilter filter)
@@ -281,7 +281,7 @@ public sealed partial class TranslationListView
             return;
         }
 
-        Snackbar.Add(Localizer.Text(TranslationTexts.Saved), Severity.Success);
+        Snackbar.Add(Localizer.Text(TranslationUiTexts.Saved), Severity.Success);
         editing = null;
         await list.ReloadAsync();
     }
@@ -336,14 +336,14 @@ public sealed partial class TranslationListView
         }
 
         editingVersion = loaded.Value.Version;
-        Snackbar.Add(Localizer.Text(TranslationTexts.ChangedMeanwhile, new { loaded.Value.Value.Text }), Severity.Info);
+        Snackbar.Add(Localizer.Text(TranslationUiTexts.ChangedMeanwhile, new { loaded.Value.Value.Text }), Severity.Info);
     }
 
     // Only an orphan can be deleted; the delete is checked against the version read just before it.
     private async Task DeleteAsync(GetTranslationListItem item)
     {
         if (item.TranslationId is not { } id
-            || !await DialogService.ConfirmDeleteAsync(Localizer, TranslationTexts.DeleteTitle, TranslationTexts.DeleteConfirm, new { item.Key }))
+            || !await DialogService.ConfirmDeleteAsync(Localizer, TranslationUiTexts.DeleteTitle, TranslationUiTexts.DeleteConfirm, new { item.Key }))
         {
             return;
         }

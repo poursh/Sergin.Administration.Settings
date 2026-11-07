@@ -10,7 +10,7 @@
     </HeaderActions>
     <Overview>
         <SerginOverviewCards>
-            <SerginOverviewCard LabelText="LanguageTexts.OverviewTranslated" ValueData="@Percent" CaptionData="@ProgressCaption" />
+            <SerginOverviewCard LabelText="LanguageUiTexts.OverviewTranslated" ValueData="@Percent" CaptionData="@ProgressCaption" />
         </SerginOverviewCards>
     </Overview>
     <Fields>
@@ -28,7 +28,7 @@
             <SerginDetailField LabelText="LanguageTexts.Direction.Label">
                 <MudSelect T="LanguageDirection" Value="language.Direction" ValueChanged="SetDirectionAsync" Disabled="busy"
                            ToStringFunc="@(direction => Localizer.Text(LanguageLabels.Direction(direction)))"
-                           HelperText="@Localizer.Text(language.IsRightToLeft ? LanguageTexts.RightToLeft : LanguageTexts.LeftToRight)"
+                           HelperText="@Localizer.Text(language.IsRightToLeft ? LanguageUiTexts.RightToLeft : LanguageUiTexts.LeftToRight)"
                            Variant="Variant.Outlined" Margin="Margin.Dense" aria-label="@Localizer.Text(LanguageTexts.Direction.Label)">
                     @foreach (LanguageDirection direction in LanguageLabels.Directions)
                     {

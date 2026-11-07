@@ -1,9 +1,9 @@
-<SerginAggregateListView TitleText="LanguageTexts.Title" Trail="Trail" Actions="Actions">
+<SerginAggregateListView TitleText="LanguageUiTexts.Title" Trail="Trail" Actions="Actions">
     <HeaderActions>
         <SerginReloadButton OnReload="ReloadAsync" />
     </HeaderActions>
     <ChildContent>
-        <SerginAggregateList @ref="list" TItem="GetLanguageListItem" Load="LoadAsync" SearchPlaceholderText="LanguageTexts.SearchPlaceholder">
+        <SerginAggregateList @ref="list" TItem="GetLanguageListItem" Load="LoadAsync" SearchPlaceholderText="LanguageUiTexts.SearchPlaceholder">
             <HeaderContent>
                 <MudTh><MudTableSortLabel T="GetLanguageListItem" SortLabel="@LanguageListFields.Culture">@Localizer.Text(LanguageTexts.Culture.Label)</MudTableSortLabel></MudTh>
                 <MudTh>@Localizer.Text(LanguageTexts.DisplayName.Label)</MudTh>
@@ -13,12 +13,12 @@
             <RowTemplate>
                 <MudTd DataLabel="@Localizer.Text(LanguageTexts.Culture.Label)"><MudLink Href="@($"/st/languages/{context.Id}")">@context.Culture</MudLink></MudTd>
                 <MudTd DataLabel="@Localizer.Text(LanguageTexts.DisplayName.Label)">@context.DisplayName</MudTd>
-                <MudTd DataLabel="@Localizer.Text(LanguageTexts.Direction.Label)">@Localizer.Text(context.IsRightToLeft ? LanguageTexts.RightToLeft : LanguageTexts.LeftToRight)</MudTd>
+                <MudTd DataLabel="@Localizer.Text(LanguageTexts.Direction.Label)">@Localizer.Text(context.IsRightToLeft ? LanguageUiTexts.RightToLeft : LanguageUiTexts.LeftToRight)</MudTd>
                 <MudTd DataLabel="@Localizer.Text(LanguageTexts.Status.Label)">@Localizer.Text(LanguageLabels.Status(context.Status))</MudTd>
             </RowTemplate>
             <RowCommands>
-                <MudTooltip Text="@Localizer.Text(LanguageTexts.Translations)">
-                    <MudIconButton Icon="@Icons.Material.Outlined.Translate" Size="Size.Small" Href="@($"/st/languages/{context.Id}/translations")" aria-label="@Localizer.Text(LanguageTexts.Translations)" />
+                <MudTooltip Text="@Localizer.Text(LanguageUiTexts.Translations)">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Translate" Size="Size.Small" Href="@($"/st/languages/{context.Id}/translations")" aria-label="@Localizer.Text(LanguageUiTexts.Translations)" />
                 </MudTooltip>
                 @if (canManage)
                 {
