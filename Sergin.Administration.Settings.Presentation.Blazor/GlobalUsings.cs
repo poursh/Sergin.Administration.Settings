@@ -10,3 +10,5 @@ global using Sergin.SharedKernel.Presentation.Blazor.Pages;
 global using Sergin.SharedKernel.Presentation.Blazor.Views;
 global using Sergin.SharedKernel.Presentation.Blazor.Validation;
 global using Microsoft.Extensions.Localization;
+global using Sergin.Administration.Settings.Presentation.Blazor.Languages;
+global using Sergin.Administration.Settings.Presentation.Blazor.Translations;

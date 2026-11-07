@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Sergin.Administration.Settings.Application.Configurations.Languages;
 using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Add;
 using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.Administration.Settings.Presentation.Blazor.Languages.Models;
@@ -18,7 +17,7 @@ public sealed partial class LanguageCreateView
     private IReadOnlyList<SerginBreadcrumb> Trail { get; } =
     [
         SerginBreadcrumb.Of(SettingsNavigation.Languages),
-        new(LanguageTexts.New),
+        new(LanguageUiTexts.New),
     ];
 
     [Inject]

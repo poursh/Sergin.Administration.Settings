@@ -9,7 +9,6 @@ using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Re
 using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.SetDirection;
 using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Unpublish;
 using Sergin.Administration.Settings.Application.Contracts.Translations.Commands.GetProgress;
-using Sergin.Administration.Settings.Application.Configurations.Translations;
 using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.Administration.Settings.Presentation.Blazor.Languages.Models;
 using Sergin.SharedKernel.Application.Aggregates;
@@ -82,11 +81,11 @@ public sealed partial class LanguageDetailView
     private IReadOnlyList<SerginPageAction> Actions =>
     [
         language?.Status == LanguageStatus.Published
-            ? new(LanguageTexts.Unpublish, Icons.Material.Outlined.Unpublished, SerginActionKind.Secondary,
+            ? new(LanguageUiTexts.Unpublish, Icons.Material.Outlined.Unpublished, SerginActionKind.Secondary,
                 OnClick: EventCallback.Factory.Create(this, UnpublishAsync), Permission: LanguagePermissions.Manage, AnyScope: true, Disabled: busy)
-            : new(LanguageTexts.Publish, Icons.Material.Outlined.Publish, SerginActionKind.Primary,
+            : new(LanguageUiTexts.Publish, Icons.Material.Outlined.Publish, SerginActionKind.Primary,
                 OnClick: EventCallback.Factory.Create(this, PublishAsync), Permission: LanguagePermissions.Manage, AnyScope: true, Disabled: busy),
-        new(LanguageTexts.Translations, Icons.Material.Outlined.Translate, SerginActionKind.Secondary, Href: $"/st/languages/{Id}/translations",
+        new(LanguageUiTexts.Translations, Icons.Material.Outlined.Translate, SerginActionKind.Secondary, Href: $"/st/languages/{Id}/translations",
             Permission: LanguagePermissions.Read, AnyScope: true),
         new(CommonTexts.Delete, Icons.Material.Outlined.Delete, SerginActionKind.Danger, OnClick: EventCallback.Factory.Create(this, DeleteAsync),
             Permission: LanguagePermissions.Manage, AnyScope: true, Disabled: busy),
@@ -94,11 +93,11 @@ public sealed partial class LanguageDetailView
 
     // A whole percentage, rounded down so a language one text short of complete does not read 100%.
     private string Percent => progress is { Total: > 0 } figures
-        ? Localizer.Text(LanguageTexts.OverviewPercent, new { Percent = Formatter.Number(figures.Translated * 100L / figures.Total) })
+        ? Localizer.Text(LanguageUiTexts.OverviewPercent, new { Percent = Formatter.Number(figures.Translated * 100L / figures.Total) })
         : "–";
 
     private string? ProgressCaption => progress is { } figures
-        ? Localizer.Text(TranslationTexts.Progress, new { Translated = Formatter.Number(figures.Translated), Total = Formatter.Number(figures.Total) })
+        ? Localizer.Text(TranslationUiTexts.Progress, new { Translated = Formatter.Number(figures.Translated), Total = Formatter.Number(figures.Total) })
         : null;
 
     protected override void OnInitialized() => validation = FormValidator.RulesFor(ToRenameCommand);
@@ -114,10 +113,10 @@ public sealed partial class LanguageDetailView
     private string DirectionShown => language switch
     {
         null => string.Empty,
-        { Direction: LanguageDirection.FromCulture } => Localizer.Text(LanguageTexts.DirectionResolved, new
+        { Direction: LanguageDirection.FromCulture } => Localizer.Text(LanguageUiTexts.DirectionResolved, new
         {
-            Setting = Localizer.Text(LanguageTexts.FromCulture),
-            Resolved = Localizer.Text(language.IsRightToLeft ? LanguageTexts.RightToLeft : LanguageTexts.LeftToRight),
+            Setting = Localizer.Text(LanguageUiTexts.FromCulture),
+            Resolved = Localizer.Text(language.IsRightToLeft ? LanguageUiTexts.RightToLeft : LanguageUiTexts.LeftToRight),
         }),
         _ => Localizer.Text(LanguageLabels.Direction(language.Direction)),
     };
@@ -192,7 +191,7 @@ public sealed partial class LanguageDetailView
             return;
         }
 
-        if (!await DialogService.ConfirmDeleteAsync(Localizer, LanguageTexts.DeleteTitle, LanguageTexts.DeleteConfirm, new { language.DisplayName }))
+        if (!await DialogService.ConfirmDeleteAsync(Localizer, LanguageUiTexts.DeleteTitle, LanguageUiTexts.DeleteConfirm, new { language.DisplayName }))
         {
             return;
         }

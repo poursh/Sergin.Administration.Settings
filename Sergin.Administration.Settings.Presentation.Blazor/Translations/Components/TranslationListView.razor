@@ -1,9 +1,9 @@
-<SerginAggregateListView TitleText="TranslationTexts.Title" Trail="Trail">
+<SerginAggregateListView TitleText="TranslationUiTexts.Title" Trail="Trail">
     <HeaderActions>
         <SerginReloadButton OnReload="ReloadAsync" />
     </HeaderActions>
     <ChildContent>
-        <SerginAggregateList @ref="list" TItem="GetTranslationListItem" Load="LoadAsync" SearchPlaceholderText="TranslationTexts.SearchPlaceholder" RowsPerPage="25"
+        <SerginAggregateList @ref="list" TItem="GetTranslationListItem" Load="LoadAsync" SearchPlaceholderText="TranslationUiTexts.SearchPlaceholder" RowsPerPage="25"
                              BuildFilters="BuildFilters" OnFilterRemoved="OnFilterRemoved" OnFiltersReset="ResetFilterFields">
             <HeaderContent>
                 <MudTh>@Localizer.Text(TranslationTexts.Key.Label)</MudTh>
