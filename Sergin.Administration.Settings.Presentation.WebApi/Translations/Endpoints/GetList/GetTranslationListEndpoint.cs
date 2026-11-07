@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using Sergin.Administration.Settings.Application.Contracts.Translations.Commands.GetList;
 using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.SharedKernel.Application;
+using Sergin.SharedKernel.Application.Localizations;
 using Sergin.SharedKernel.Presentation.WebApi.Endpoints.Results;
 
 namespace Sergin.Administration.Settings.Presentation.WebApi.Translations.Endpoints.GetList;
@@ -20,10 +21,11 @@ internal class GetTranslationListEndpoint : IEndpoint
                 [FromQuery] string? module,
                 [FromQuery] string? category,
                 [FromQuery] TranslationStatus? status,
+                [FromQuery] TextOrigin? origin,
                 ISender sender) =>
             {
                 ErrorOr<ListQueryResponse<GetTranslationListItem>> res = await sender.Send(new GetTranslationListQueryCommand(
-                    new LanguageId(languageId), request.ToPaggination(), request.Term, module, category, status));
+                    new LanguageId(languageId), request.ToPaggination(), request.Term, module, category, status, origin));
 
                 return res.ToApiResult();
             })

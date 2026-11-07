@@ -47,6 +47,12 @@ internal sealed class GetTranslationListQueryCommandHandler(
             return false;
         }
 
+        // An orphaned key has no origin, so it matches no origin filter.
+        if (request.Origin is { } origin && item.Origin != origin)
+        {
+            return false;
+        }
+
         return request.Term?.Value is not { Length: > 0 } term
             || Contains(item.Key, term)
             || Contains(item.Default, term)

@@ -18,12 +18,12 @@ using Sergin.SharedKernel.Presentation.Blazor.Errors;
 namespace Sergin.Administration.Settings.Presentation.Blazor.Translations.Components;
 
 /// <summary>
-/// Every declared text in one language, merged with its translations: filtered by module, then category, and by
-/// status; searched over key, default and translation; edited in place.
+/// Every declared text in one language, merged with its translations: filtered by module, then category, by status,
+/// and by origin (screens or messages); searched over key, default and translation; edited in place.
 /// </summary>
 /// <remarks>
 /// <para>
-/// The list query carries module, category and status as its own properties, not as <c>Filtering</c>: the filter
+/// The list query carries module, category, status and origin as its own properties, not as <c>Filtering</c>: the filter
 /// panel's Apply copies the pickers into the applied values the load sends, and the chips mirror those.
 /// </para>
 /// <para>
@@ -38,6 +38,8 @@ public sealed partial class TranslationListView
     private static readonly TranslationStatus[] Statuses =
         [TranslationStatus.Untranslated, TranslationStatus.Translated, TranslationStatus.NeedsReview, TranslationStatus.Orphaned];
 
+    private static readonly TextOrigin[] Origins = [TextOrigin.Ui, TextOrigin.Application];
+
     private SerginAggregateList<GetTranslationListItem> list = default!;
     private LanguageQueryResponse? language;
     private bool canEdit;
@@ -47,9 +49,11 @@ public sealed partial class TranslationListView
     private string? filterModule;
     private string? filterCategory;
     private TranslationStatus? filterStatus;
+    private TextOrigin? filterOrigin;
     private string? appliedModule;
     private string? appliedCategory;
     private TranslationStatus? appliedStatus;
+    private TextOrigin? appliedOrigin;
 
     private GetTranslationListItem? editing;
     private RowVersion? editingVersion;
@@ -114,6 +118,9 @@ public sealed partial class TranslationListView
         _ => TranslationUiTexts.Untranslated,
     };
 
+    private static TextDefinition OriginText(TextOrigin origin) =>
+        origin == TextOrigin.Ui ? TranslationUiTexts.Screens : TranslationUiTexts.Messages;
+
     private static Color StatusColor(TranslationStatus status) => status switch
     {
         TranslationStatus.Translated => Color.Success,
@@ -127,7 +134,7 @@ public sealed partial class TranslationListView
     private Task<ErrorOr<ListQueryResponse<GetTranslationListItem>>> LoadAsync(SerginListRequest request, CancellationToken cancellationToken) =>
         Dispatcher.SendAsync(
             new GetTranslationListQueryCommand(
-                new LanguageId(LanguageId), request.Paggination, request.Term, appliedModule, appliedCategory, appliedStatus),
+                new LanguageId(LanguageId), request.Paggination, request.Term, appliedModule, appliedCategory, appliedStatus, appliedOrigin),
             cancellationToken);
 
     private Task ReloadAsync()
@@ -159,6 +166,7 @@ public sealed partial class TranslationListView
         appliedModule = filterModule;
         appliedCategory = filterModule is null ? null : filterCategory;
         appliedStatus = filterStatus;
+        appliedOrigin = filterOrigin;
 
         return AppliedChips();
     }
@@ -188,6 +196,15 @@ public sealed partial class TranslationListView
                 Chip(TranslationTexts.Status, Localizer.Text(StatusText(status)))));
         }
 
+        if (appliedOrigin is { } origin)
+        {
+            filters.Add(new(
+                nameof(GetTranslationListQueryCommand.Origin),
+                FilteringType.equals,
+                origin.ToString(),
+                Chip(TranslationTexts.Origin, Localizer.Text(OriginText(origin)))));
+        }
+
         return [.. filters];
     }
 
@@ -211,6 +228,9 @@ public sealed partial class TranslationListView
             case nameof(GetTranslationListQueryCommand.Status):
                 appliedStatus = filterStatus = null;
                 break;
+            case nameof(GetTranslationListQueryCommand.Origin):
+                appliedOrigin = filterOrigin = null;
+                break;
             default:
                 break;
         }
@@ -221,6 +241,7 @@ public sealed partial class TranslationListView
         appliedModule = filterModule = null;
         appliedCategory = filterCategory = null;
         appliedStatus = filterStatus = null;
+        appliedOrigin = filterOrigin = null;
         categories = [];
     }
 

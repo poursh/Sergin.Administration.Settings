@@ -27,6 +27,8 @@ public static class TranslationTexts
 
     public static readonly FieldText Status = Category.Field("Status", "Status");
 
+    public static readonly FieldText Origin = Category.Field("Origin", "Type");
+
     public static readonly TextDefinition Singular = Category.Text("Singular", "Translation");
 
     /// <summary>A translation whose placeholders are not the default's; <c>{Expected}</c> lists the default's.</summary>

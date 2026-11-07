@@ -6,7 +6,7 @@ namespace Sergin.Administration.Settings.Application.Translations;
 /// <summary>
 /// The catalog's keys merged with one language's rows, ordered by key: a declared key with no row is untranslated, one
 /// whose row was translated from the current default translated, from another default needing review; a row whose key
-/// the catalog no longer declares is orphaned. Merged in memory: the catalog lives in code, the rows in the database.
+/// the catalog no longer declares is orphaned and has no origin. Merged in memory: the catalog lives in code, the rows in the database.
 /// </summary>
 internal static class TranslationListMerge
 {
@@ -26,12 +26,13 @@ internal static class TranslationListMerge
                     ? TranslationStatus.Translated
                     : TranslationStatus.NeedsReview;
 
-                items.Add(new GetTranslationListItem(key, entry.Module, category, entry.Definition.Default, row.Text, status, row.Id));
+                items.Add(new GetTranslationListItem(
+                    key, entry.Module, category, entry.Definition.Default, row.Text, status, row.Id, entry.Origin));
             }
             else
             {
                 items.Add(new GetTranslationListItem(
-                    key, entry.Module, category, entry.Definition.Default, Text: null, TranslationStatus.Untranslated, TranslationId: null));
+                    key, entry.Module, category, entry.Definition.Default, Text: null, TranslationStatus.Untranslated, TranslationId: null, entry.Origin));
             }
         }
 
@@ -42,7 +43,7 @@ internal static class TranslationListMerge
             string category = string.Join(SerginStringKey.Separator, segments.Skip(1).SkipLast(1));
 
             items.Add(new GetTranslationListItem(
-                orphan.Key, segments[0], category, orphan.SourceText, orphan.Text, TranslationStatus.Orphaned, orphan.Id));
+                orphan.Key, segments[0], category, orphan.SourceText, orphan.Text, TranslationStatus.Orphaned, orphan.Id, Origin: null));
         }
 
         items.Sort((left, right) => string.CompareOrdinal(left.Key, right.Key));
