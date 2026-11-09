@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -14,7 +15,7 @@ internal class SetLanguageDirectionEndpoint : IEndpoint
             [FromRoute] Guid languageId, [FromBody] SetLanguageDirectionModel language, ISender sender) =>
         {
             ErrorOr<SetLanguageDirectionCommandResponse> res =
-                await sender.Send(new SetLanguageDirectionCommand(languageId, language.Direction));
+                await sender.Send(new SetLanguageDirectionCommand(new LanguageId(languageId), language.Direction));
 
             return res.ToApiResult();
         });

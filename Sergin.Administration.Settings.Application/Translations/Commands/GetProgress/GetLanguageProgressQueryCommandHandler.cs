@@ -16,13 +16,13 @@ internal sealed class GetLanguageProgressQueryCommandHandler(
     public async Task<ErrorOr<LanguageProgressQueryResponse>> Handle(
         GetLanguageProgressQueryCommand request, CancellationToken cancellationToken)
     {
-        if (!await languages.ExistsAsync(request.LanguageId, cancellationToken))
+        if (!await languages.ExistsAsync(request.Id, cancellationToken))
         {
             return Error.NotFound();
         }
 
         IReadOnlyList<GetTranslationListItem> merged =
-            TranslationListMerge.Merge(catalog, await rows.GetRowsAsync(request.LanguageId, cancellationToken));
+            TranslationListMerge.Merge(catalog, await rows.GetRowsAsync(request.Id, cancellationToken));
 
         int translated = merged.Count(item => item.Status is TranslationStatus.Translated or TranslationStatus.NeedsReview);
 

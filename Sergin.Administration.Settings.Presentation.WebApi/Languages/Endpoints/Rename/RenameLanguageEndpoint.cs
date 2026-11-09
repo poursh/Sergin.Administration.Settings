@@ -15,7 +15,7 @@ internal class RenameLanguageEndpoint : IEndpoint
             [FromRoute] Guid languageId, [FromBody] RenameLanguageModel language, ISender sender) =>
         {
             ErrorOr<RenameLanguageCommandResponse> res = await sender.Send(
-                new RenameLanguageCommand(languageId, new LanguageDisplayName(language.DisplayName)));
+                new RenameLanguageCommand(new LanguageId(languageId), new LanguageDisplayName(language.DisplayName)));
 
             return res.ToApiResult();
         });

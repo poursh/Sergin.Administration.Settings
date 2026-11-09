@@ -3,4 +3,4 @@ using Sergin.SharedKernel.Application.Commands.Queries;
 
 namespace Sergin.Administration.Settings.Application.Contracts.Translations.Commands.GetProgress;
 
-public sealed record GetLanguageProgressQueryCommand(LanguageId LanguageId) : IQuery<LanguageProgressQueryResponse>;
+public sealed record GetLanguageProgressQueryCommand(LanguageId Id) : IQuery<LanguageProgressQueryResponse>, IEntityViewQuery<Language, LanguageId>;

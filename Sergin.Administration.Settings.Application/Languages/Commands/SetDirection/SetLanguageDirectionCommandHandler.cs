@@ -11,7 +11,7 @@ internal sealed class SetLanguageDirectionCommandHandler(
 {
     public async Task<ErrorOr<SetLanguageDirectionCommandResponse>> Handle(SetLanguageDirectionCommand request, CancellationToken cancellationToken)
     {
-        Language? language = await repository.GetAsync(new LanguageId(request.Id), cancellationToken);
+        Language? language = await repository.GetAsync(request.Id, cancellationToken);
 
         if (language is null)
         {

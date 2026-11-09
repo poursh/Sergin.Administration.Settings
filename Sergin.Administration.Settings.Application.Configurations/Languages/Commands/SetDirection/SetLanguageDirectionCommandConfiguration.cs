@@ -1,11 +1,10 @@
 using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.SetDirection;
-using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.SharedKernel.Application.Commands.Configuration;
 
 namespace Sergin.Administration.Settings.Application.Configurations.Languages.Commands.SetDirection;
 
-internal sealed class SetLanguageDirectionCommandConfiguration : ICommandConfiguration<SetLanguageDirectionCommand, Language>
+internal sealed class SetLanguageDirectionCommandConfiguration : ICommandConfiguration<SetLanguageDirectionCommand>
 {
     public void Configure(CommandConfigurationBuilder<SetLanguageDirectionCommand> builder) =>
-        builder.RequirePermissions(LanguagePermissions.Manage).RequireExpectedVersion().NotShown(command => command.Id);
+        builder.RequirePermissions(LanguagePermissions.Manage);
 }

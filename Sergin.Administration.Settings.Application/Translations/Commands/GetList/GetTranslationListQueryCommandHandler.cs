@@ -15,13 +15,13 @@ internal sealed class GetTranslationListQueryCommandHandler(
     public async Task<ErrorOr<ListQueryResponse<GetTranslationListItem>>> Handle(
         GetTranslationListQueryCommand request, CancellationToken cancellationToken)
     {
-        if (!await languages.ExistsAsync(request.LanguageId, cancellationToken))
+        if (!await languages.ExistsAsync(request.ParentId, cancellationToken))
         {
             return Error.NotFound();
         }
 
         IReadOnlyList<GetTranslationListItem> merged =
-            TranslationListMerge.Merge(catalog, await rows.GetRowsAsync(request.LanguageId, cancellationToken));
+            TranslationListMerge.Merge(catalog, await rows.GetRowsAsync(request.ParentId, cancellationToken));
 
         IReadOnlyCollection<GetTranslationListItem> matching = [.. merged.Where(item => Matches(item, request))];
         IReadOnlyCollection<GetTranslationListItem> page =

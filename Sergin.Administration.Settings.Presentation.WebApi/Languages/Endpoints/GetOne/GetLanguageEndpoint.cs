@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -12,7 +13,7 @@ internal class GetLanguageEndpoint : IEndpoint
     {
         routeBuilder.MapGet("/languages/{languageId:guid}", async ([FromRoute] Guid languageId, ISender sender) =>
         {
-            ErrorOr<LanguageQueryResponse> res = await sender.Send(new GetLanguageByIdQueryCommand(languageId));
+            ErrorOr<LanguageQueryResponse> res = await sender.Send(new GetLanguageByIdQueryCommand(new LanguageId(languageId)));
 
             return res.ToApiResult();
         });

@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -12,7 +13,7 @@ internal class UnpublishLanguageEndpoint : IEndpoint
     {
         routeBuilder.MapPost("/languages/{languageId:guid}/unpublish", async ([FromRoute] Guid languageId, ISender sender) =>
         {
-            ErrorOr<UnpublishLanguageCommandResponse> res = await sender.Send(new UnpublishLanguageCommand(languageId));
+            ErrorOr<UnpublishLanguageCommandResponse> res = await sender.Send(new UnpublishLanguageCommand(new LanguageId(languageId)));
 
             return res.ToApiResult();
         });

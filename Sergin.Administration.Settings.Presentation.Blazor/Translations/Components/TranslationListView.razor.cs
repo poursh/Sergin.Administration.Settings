@@ -99,7 +99,7 @@ public sealed partial class TranslationListView
 
     protected override async Task OnParametersSetAsync()
     {
-        ErrorOr<LanguageQueryResponse> loaded = await Dispatcher.SendAsync(new GetLanguageByIdQueryCommand(LanguageId));
+        ErrorOr<LanguageQueryResponse> loaded = await Dispatcher.SendAsync(new GetLanguageByIdQueryCommand(new LanguageId(LanguageId)));
 
         // The list reports a missing language itself; the trail then keeps its placeholder.
         language = loaded.IsError ? null : loaded.Value;

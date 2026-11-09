@@ -11,7 +11,7 @@ internal sealed class RenameLanguageCommandHandler(
 {
     public async Task<ErrorOr<RenameLanguageCommandResponse>> Handle(RenameLanguageCommand request, CancellationToken cancellationToken)
     {
-        Language? language = await repository.GetAsync(new LanguageId(request.Id), cancellationToken);
+        Language? language = await repository.GetAsync(request.Id, cancellationToken);
 
         if (language is null)
         {

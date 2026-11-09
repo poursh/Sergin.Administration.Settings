@@ -14,7 +14,7 @@ internal sealed class DeleteLanguageCommandHandler(
 {
     public async Task<ErrorOr<DeleteLanguageCommandResponse>> Handle(DeleteLanguageCommand request, CancellationToken cancellationToken)
     {
-        Language? language = await repository.GetAsync(new LanguageId(request.Id), cancellationToken);
+        Language? language = await repository.GetAsync(request.Id, cancellationToken);
 
         if (language is null)
         {

@@ -20,7 +20,7 @@ internal sealed class AddTranslationCommandHandler(
 {
     public async Task<ErrorOr<AddTranslationCommandResponse>> Handle(AddTranslationCommand request, CancellationToken cancellationToken)
     {
-        Language? language = await languages.GetAsync(request.LanguageId, cancellationToken);
+        Language? language = await languages.GetAsync(request.ParentId, cancellationToken);
 
         if (language is null)
         {
@@ -35,7 +35,7 @@ internal sealed class AddTranslationCommandHandler(
         }
 
         var translation = Translation.Create(
-            request.LanguageId, new TranslationKey(request.Key), new TranslationText(request.Text), new SourceText(definition.Default));
+            request.ParentId, new TranslationKey(request.Key), new TranslationText(request.Text), new SourceText(definition.Default));
 
         repository.Insert(translation);
 
