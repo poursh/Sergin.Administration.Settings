@@ -9,7 +9,7 @@ using Sergin.SharedKernel.Domain.Localizations;
 
 namespace Sergin.Administration.Settings.Application.Translations.Commands.Change;
 
-// Sent at the version the translator loaded (RequireExpectedVersion): of two translators editing one row, the second
+// Sent at the version the translator loaded (the command type requires the root's version): of two translators editing one row, the second
 // save is stale and the first edit survives. The source becomes the default as it reads now, clearing a review flag.
 internal sealed class ChangeTranslationCommandHandler(
     ISettingsUnitOfWork unitOfWork,
