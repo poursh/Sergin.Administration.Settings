@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -12,7 +13,7 @@ internal class PublishLanguageEndpoint : IEndpoint
     {
         routeBuilder.MapPost("/languages/{languageId:guid}/publish", async ([FromRoute] Guid languageId, ISender sender) =>
         {
-            ErrorOr<PublishLanguageCommandResponse> res = await sender.Send(new PublishLanguageCommand(languageId));
+            ErrorOr<PublishLanguageCommandResponse> res = await sender.Send(new PublishLanguageCommand(new LanguageId(languageId)));
 
             return res.ToApiResult();
         });

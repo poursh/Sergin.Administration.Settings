@@ -1,5 +1,4 @@
 using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.GetAudit;
-using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.SharedKernel.Application.Aggregates;
 using Sergin.SharedKernel.Application.Commands.Queries;
 
@@ -10,7 +9,7 @@ internal sealed class GetLanguageAuditQueryCommandHandler(IGetLanguageAuditQuery
 {
     public async Task<ErrorOr<AuditInfo>> Handle(GetLanguageAuditQueryCommand request, CancellationToken cancellationToken)
     {
-        AuditInfo? audit = await repository.GetLanguageAuditAsync(new LanguageId(request.Id), cancellationToken);
+        AuditInfo? audit = await repository.GetLanguageAuditAsync(request.Id, cancellationToken);
 
         if (audit is null)
         {

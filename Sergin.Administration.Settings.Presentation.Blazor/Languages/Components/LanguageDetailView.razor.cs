@@ -121,11 +121,11 @@ public sealed partial class LanguageDetailView
         _ => Localizer.Text(LanguageLabels.Direction(language.Direction)),
     };
 
-    private Task<ErrorOr<AuditInfo>> LoadAuditAsync() => Dispatcher.SendAsync(new GetLanguageAuditQueryCommand(Id));
+    private Task<ErrorOr<AuditInfo>> LoadAuditAsync() => Dispatcher.SendAsync(new GetLanguageAuditQueryCommand(new LanguageId(Id)));
 
     private async Task LoadAsync()
     {
-        ErrorOr<Versioned<LanguageQueryResponse>> loaded = await Dispatcher.SendVersionedAsync(new GetLanguageByIdQueryCommand(Id));
+        ErrorOr<Versioned<LanguageQueryResponse>> loaded = await Dispatcher.SendVersionedAsync(new GetLanguageByIdQueryCommand(new LanguageId(Id)));
 
         if (loaded.IsError)
         {
@@ -147,7 +147,7 @@ public sealed partial class LanguageDetailView
         progress = figures.IsError ? null : figures.Value;
     }
 
-    private RenameLanguageCommand ToRenameCommand() => new(Id, new LanguageDisplayName(model.DisplayName.Trim()));
+    private RenameLanguageCommand ToRenameCommand() => new(new LanguageId(Id), new LanguageDisplayName(model.DisplayName.Trim()));
 
     private async Task RenameAsync()
     {
@@ -159,11 +159,11 @@ public sealed partial class LanguageDetailView
         }
     }
 
-    private Task SetDirectionAsync(LanguageDirection direction) => SendGuardedAsync(new SetLanguageDirectionCommand(Id, direction));
+    private Task SetDirectionAsync(LanguageDirection direction) => SendGuardedAsync(new SetLanguageDirectionCommand(new LanguageId(Id), direction));
 
-    private Task PublishAsync() => SendGuardedAsync(new PublishLanguageCommand(Id));
+    private Task PublishAsync() => SendGuardedAsync(new PublishLanguageCommand(new LanguageId(Id)));
 
-    private Task UnpublishAsync() => SendGuardedAsync(new UnpublishLanguageCommand(Id));
+    private Task UnpublishAsync() => SendGuardedAsync(new UnpublishLanguageCommand(new LanguageId(Id)));
 
     private async Task SendGuardedAsync<TResponse>(IRequest<ErrorOr<TResponse>> command)
     {
@@ -197,7 +197,7 @@ public sealed partial class LanguageDetailView
         }
 
         busy = true;
-        ErrorOr<Versioned<DeleteLanguageCommandResponse>> result = await Dispatcher.SendVersionedAsync(new DeleteLanguageCommand(Id), expected);
+        ErrorOr<Versioned<DeleteLanguageCommandResponse>> result = await Dispatcher.SendVersionedAsync(new DeleteLanguageCommand(new LanguageId(Id)), expected);
         busy = false;
 
         if (result.IsError)

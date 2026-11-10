@@ -1,4 +1,3 @@
-using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.SharedKernel.Application.Concurrency;
 
 namespace Sergin.Administration.Settings.Application.Languages.Commands.GetOne;
@@ -10,7 +9,7 @@ internal sealed class GetLanguageByIdQueryCommandHandler(IGetLanguageQueryReposi
     public override async Task<ErrorOr<Versioned<LanguageQueryResponse>>> HandleVersioned(
         GetLanguageByIdQueryCommand request, CancellationToken cancellationToken)
     {
-        Versioned<LanguageQueryResponse>? res = await repository.GetLanguageById(new LanguageId(request.Id), cancellationToken);
+        Versioned<LanguageQueryResponse>? res = await repository.GetLanguageById(request.Id, cancellationToken);
 
         if (res is null)
         {

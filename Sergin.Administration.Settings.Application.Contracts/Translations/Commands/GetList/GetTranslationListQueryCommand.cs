@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Translations;
 using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.SharedKernel.Application.Commands.Queries;
 using Sergin.SharedKernel.Application.Localizations;
@@ -10,10 +11,10 @@ namespace Sergin.Administration.Settings.Application.Contracts.Translations.Comm
 /// <c>devices.errors</c>); <see cref="Origin"/> keeps the keys the application or the UI declares, never an orphaned
 /// one; the search term reads the key, the default and the translation.
 /// </summary>
-public sealed record GetTranslationListQueryCommand : ListQuery<GetTranslationListItem>
+public sealed record GetTranslationListQueryCommand : ListQuery<GetTranslationListItem>, IListOf<Translation>, IUnderParent<Language, LanguageId>
 {
     public GetTranslationListQueryCommand(
-        LanguageId languageId,
+        LanguageId parentId,
         Paggination paggination,
         Term? term = default,
         string? module = default,
@@ -22,14 +23,14 @@ public sealed record GetTranslationListQueryCommand : ListQuery<GetTranslationLi
         TextOrigin? origin = default)
         : base(paggination, term)
     {
-        LanguageId = languageId;
+        ParentId = parentId;
         Module = module;
         Category = category;
         Status = status;
         Origin = origin;
     }
 
-    public LanguageId LanguageId { get; init; }
+    public LanguageId ParentId { get; init; }
 
     public string? Module { get; init; }
 

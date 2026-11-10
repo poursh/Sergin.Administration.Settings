@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -12,7 +13,7 @@ internal class DeleteLanguageEndpoint : IEndpoint
     {
         routeBuilder.MapDelete("/languages/{languageId:guid}", async ([FromRoute] Guid languageId, ISender sender) =>
         {
-            ErrorOr<DeleteLanguageCommandResponse> res = await sender.Send(new DeleteLanguageCommand(languageId));
+            ErrorOr<DeleteLanguageCommandResponse> res = await sender.Send(new DeleteLanguageCommand(new LanguageId(languageId)));
 
             return res.ToApiResult();
         });

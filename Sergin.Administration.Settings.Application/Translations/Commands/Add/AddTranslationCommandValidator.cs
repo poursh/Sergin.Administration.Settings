@@ -16,7 +16,7 @@ internal sealed class AddTranslationCommandValidator : AbstractValidator<AddTran
 {
     public AddTranslationCommandValidator(ILanguageRepository languages, ITranslationRepository translations, TextCatalog catalog)
     {
-        RuleFor(x => x.LanguageId).MustExistIn(languages, LanguageTexts.Singular);
+        RuleFor(x => x.ParentId).MustExistIn(languages, LanguageTexts.Singular);
 
         RuleFor(x => x.Key).NotEmpty();
 
@@ -27,7 +27,7 @@ internal sealed class AddTranslationCommandValidator : AbstractValidator<AddTran
 
         RuleFor(x => x.Key)
             .MustAsync(async (command, key, cancellationToken) =>
-                await translations.GetAsync(command.LanguageId, new TranslationKey(key), cancellationToken) is null)
+                await translations.GetAsync(command.ParentId, new TranslationKey(key), cancellationToken) is null)
             .WithMessage(_ => ValidationTexts.Template(TranslationTexts.AlreadyTranslated))
             .When(x => !string.IsNullOrEmpty(x.Key) && catalog.TryGet(x.Key, out _));
 

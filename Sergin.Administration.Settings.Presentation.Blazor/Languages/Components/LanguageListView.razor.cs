@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Sergin.Administration.Settings.Application.Configurations.Languages;
@@ -57,7 +58,7 @@ public sealed partial class LanguageListView
             return;
         }
 
-        ErrorOr<Versioned<LanguageQueryResponse>> loaded = await Dispatcher.SendVersionedAsync(new GetLanguageByIdQueryCommand(item.Id));
+        ErrorOr<Versioned<LanguageQueryResponse>> loaded = await Dispatcher.SendVersionedAsync(new GetLanguageByIdQueryCommand(new LanguageId(item.Id)));
 
         if (loaded.IsError)
         {
@@ -66,7 +67,7 @@ public sealed partial class LanguageListView
         else
         {
             ErrorOr<Versioned<DeleteLanguageCommandResponse>> result =
-                await Dispatcher.SendVersionedAsync(new DeleteLanguageCommand(item.Id), loaded.Value.Version);
+                await Dispatcher.SendVersionedAsync(new DeleteLanguageCommand(new LanguageId(item.Id)), loaded.Value.Version);
 
             if (result.IsError)
             {

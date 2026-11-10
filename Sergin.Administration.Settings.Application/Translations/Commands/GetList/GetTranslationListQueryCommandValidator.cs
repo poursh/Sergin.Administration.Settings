@@ -13,7 +13,7 @@ internal sealed class GetTranslationListQueryCommandValidator : ListQueryValidat
     public GetTranslationListQueryCommandValidator()
         : base(TranslationListFields.Set)
     {
-        RuleFor(x => x.LanguageId.Value).NotEmpty().OverridePropertyName(nameof(GetTranslationListQueryCommand.LanguageId));
+        RuleFor(x => x.ParentId.Value).NotEmpty().OverridePropertyName(nameof(GetTranslationListQueryCommand.ParentId));
 
         RuleFor(x => x.Status).IsInEnum();
     }

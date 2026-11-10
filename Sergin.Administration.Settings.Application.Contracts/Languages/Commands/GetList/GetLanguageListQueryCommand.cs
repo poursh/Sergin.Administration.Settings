@@ -1,8 +1,9 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.SharedKernel.Application.Commands.Queries;
 
 namespace Sergin.Administration.Settings.Application.Contracts.Languages.Commands.GetList;
 
-public sealed record GetLanguageListQueryCommand : ListQuery<GetLanguageListItem>
+public sealed record GetLanguageListQueryCommand : ListQuery<GetLanguageListItem>, IListOf<Language>
 {
     public GetLanguageListQueryCommand(
         Paggination paggination,

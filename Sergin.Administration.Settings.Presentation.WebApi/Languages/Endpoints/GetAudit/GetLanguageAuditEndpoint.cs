@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -13,7 +14,7 @@ internal class GetLanguageAuditEndpoint : IEndpoint
     {
         routeBuilder.MapGet("/languages/{languageId:guid}/audit", async ([FromRoute] Guid languageId, ISender sender) =>
         {
-            ErrorOr<AuditInfo> res = await sender.Send(new GetLanguageAuditQueryCommand(languageId));
+            ErrorOr<AuditInfo> res = await sender.Send(new GetLanguageAuditQueryCommand(new LanguageId(languageId)));
 
             return res.ToApiResult();
         });
