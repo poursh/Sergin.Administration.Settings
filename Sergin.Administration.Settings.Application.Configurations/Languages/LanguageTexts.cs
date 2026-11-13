@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.SharedKernel.Application.Localizations;
 
 namespace Sergin.Administration.Settings.Application.Configurations.Languages;
@@ -21,6 +22,15 @@ public static class LanguageTexts
     public static readonly FieldText Direction = Category.Field("Direction", "Direction");
 
     public static readonly FieldText Status = Category.Field("Status", "Status");
+
+    public static readonly EnumTexts<LanguageDirection> DirectionValues = Category.Values(
+        (LanguageDirection.FromCulture, "From the culture", "The direction the culture itself is written in."),
+        (LanguageDirection.LeftToRight, "Left to right", null),
+        (LanguageDirection.RightToLeft, "Right to left", null));
+
+    public static readonly EnumTexts<LanguageStatus> StatusValues = Category.Values(
+        (LanguageStatus.Draft, "Draft", "A language only translators see."),
+        (LanguageStatus.Published, "Published", "A language every user may choose."));
 
     public static readonly TextDefinition Singular = Category.Text("Singular", "Language");
 

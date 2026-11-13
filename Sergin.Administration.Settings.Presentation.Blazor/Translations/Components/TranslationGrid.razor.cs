@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Sergin.Administration.Settings.Application.Configurations.Languages;
 using Sergin.Administration.Settings.Application.Configurations.Translations;
 using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.GetOne;
+using Sergin.SharedKernel.Presentation.Blazor.Aggregates;
 using Sergin.Administration.Settings.Application.Contracts.Translations.Commands.Add;
 using Sergin.Administration.Settings.Application.Contracts.Translations.Commands.Change;
 using Sergin.Administration.Settings.Application.Contracts.Translations.Commands.Delete;
@@ -18,7 +18,7 @@ using Sergin.SharedKernel.Presentation.Blazor.Errors;
 namespace Sergin.Administration.Settings.Presentation.Blazor.Translations.Components;
 
 /// <summary>
-/// Every declared text in one language, merged with its translations: filtered by module, then category, by status,
+/// The translation list's body, in the generated list view's <c>ListBody</c> slot: every declared text in one language, merged with its translations: filtered by module, then category, by status,
 /// and by origin (screens or messages); searched over key, default and translation; edited in place.
 /// </summary>
 /// <remarks>
@@ -33,7 +33,7 @@ namespace Sergin.Administration.Settings.Presentation.Blazor.Translations.Compon
 /// translation reads now, keeping the user's text so a second save replaces it deliberately.
 /// </para>
 /// </remarks>
-public sealed partial class TranslationListView
+public sealed partial class TranslationGrid
 {
     private static readonly TranslationStatus[] Statuses =
         [TranslationStatus.Untranslated, TranslationStatus.Translated, TranslationStatus.NeedsReview, TranslationStatus.Orphaned];
@@ -41,7 +41,7 @@ public sealed partial class TranslationListView
     private static readonly TextOrigin[] Origins = [TextOrigin.Ui, TextOrigin.Application];
 
     private SerginAggregateList<GetTranslationListItem> list = default!;
-    private LanguageQueryResponse? language;
+    private int generation;
     private bool canEdit;
 
     private IReadOnlyList<string> modules = [];
@@ -60,9 +60,10 @@ public sealed partial class TranslationListView
     private string draft = string.Empty;
     private bool saving;
 
+    /// <summary>What the generated list view hands the slot: the language (<c>Parent</c>, its id <c>ParentId</c>) and the reload <c>Generation</c>.</summary>
     [Parameter]
     [EditorRequired]
-    public Guid LanguageId { get; set; }
+    public AggregateViewContext Context { get; set; } = default!;
 
     [Inject]
     private IStringLocalizer Localizer { get; set; } = default!;
@@ -85,24 +86,17 @@ public sealed partial class TranslationListView
     [Inject]
     private IScopeAuthorization ScopeAuthorization { get; set; } = default!;
 
-    private IReadOnlyList<SerginBreadcrumb> Trail =>
-    [
-        SerginBreadcrumb.Of(SettingsNavigation.Languages),
-        language is null
-            ? new(LanguageTexts.Singular, $"/st/languages/{LanguageId}")
-            : SerginBreadcrumb.Data(language.DisplayName, $"/st/languages/{LanguageId}"),
-        new(TranslationUiTexts.Title),
-    ];
+    // The generated view loads the language for its trail and hands it over; a failed load leaves it null.
+    private LanguageQueryResponse? Language => Context.Parent as LanguageQueryResponse;
+
+    private Guid LanguageId => Context.ParentId ?? throw new InvalidOperationException("The translation grid is listed under a language: it needs Context.ParentId.");
 
     // The translations are shown in the language's own direction, which the page around them need not share.
-    private string Direction => language?.IsRightToLeft == true ? "rtl" : "auto";
+    private string Direction => Language?.IsRightToLeft == true ? "rtl" : "auto";
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
-        ErrorOr<LanguageQueryResponse> loaded = await Dispatcher.SendAsync(new GetLanguageByIdQueryCommand(new LanguageId(LanguageId)));
-
-        // The list reports a missing language itself; the trail then keeps its placeholder.
-        language = loaded.IsError ? null : loaded.Value;
+        generation = Context.Generation;
 
         // Presentation only: the pipeline checks the same permission on every write. Translations belong to no scope.
         canEdit = await ScopeAuthorization.CurrentUserHoldsAnywhereAsync(TranslationPermissions.Edit);
@@ -110,16 +104,21 @@ public sealed partial class TranslationListView
         modules = [.. Catalog.Entries.Select(entry => entry.Module).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal)];
     }
 
-    private static TextDefinition StatusText(TranslationStatus status) => status switch
+    // The slot keeps its instance across the header's Reload, so a new generation is the cue to load again.
+    protected override async Task OnParametersSetAsync()
     {
-        TranslationStatus.Translated => TranslationUiTexts.Translated,
-        TranslationStatus.NeedsReview => TranslationUiTexts.NeedsReview,
-        TranslationStatus.Orphaned => TranslationUiTexts.Orphaned,
-        _ => TranslationUiTexts.Untranslated,
-    };
+        if (generation == Context.Generation)
+        {
+            return;
+        }
 
-    private static TextDefinition OriginText(TextOrigin origin) =>
-        origin == TextOrigin.Ui ? TranslationUiTexts.Screens : TranslationUiTexts.Messages;
+        generation = Context.Generation;
+        await ReloadAsync();
+    }
+
+    private static TextDefinition StatusText(TranslationStatus status) => TranslationTexts.StatusValues.For(status);
+
+    private static TextDefinition OriginText(TextOrigin origin) => TranslationTexts.OriginValues.For(origin);
 
     private static Color StatusColor(TranslationStatus status) => status switch
     {
