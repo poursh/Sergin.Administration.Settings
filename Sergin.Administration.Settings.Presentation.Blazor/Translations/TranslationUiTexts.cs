@@ -10,10 +10,6 @@ public static class TranslationUiTexts
 {
     private static readonly TextCategory category = TranslationTexts.Category;
 
-    private static readonly TextCategory statuses = category.Child("Statuses");
-
-    private static readonly TextCategory origins = category.Child("Origins");
-
     public static readonly TextDefinition Title = category.Text("Title", "Translations");
 
     public static readonly TextDefinition Progress =
@@ -38,21 +34,4 @@ public static class TranslationUiTexts
         "DeleteConfirm",
         "Delete the translation of {Key}? The application no longer declares this text.",
         "{Key} is the text's key, shown as it is.");
-
-    public static readonly TextDefinition Untranslated =
-        statuses.Text("Untranslated", "Untranslated", "No translation yet: the English default is shown.");
-
-    public static readonly TextDefinition Translated = statuses.Text("Translated", "Translated");
-
-    public static readonly TextDefinition NeedsReview =
-        statuses.Text("NeedsReview", "Needs review", "The English default changed after this was translated.");
-
-    public static readonly TextDefinition Orphaned =
-        statuses.Text("Orphaned", "Orphaned", "The text no longer exists in the application; the translation is never shown.");
-
-    public static readonly TextDefinition Screens =
-        origins.Text("Screens", "Screens", "Texts the pages show: titles, buttons, confirmations, menus.");
-
-    public static readonly TextDefinition Messages =
-        origins.Text("Messages", "Messages", "Field names, validation messages and error messages.");
 }

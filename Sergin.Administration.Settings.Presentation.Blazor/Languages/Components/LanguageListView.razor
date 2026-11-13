@@ -13,7 +13,7 @@
             <RowTemplate>
                 <MudTd DataLabel="@Localizer.Text(LanguageTexts.Culture.Label)"><MudLink Href="@($"/st/languages/{context.Id}")">@context.Culture</MudLink></MudTd>
                 <MudTd DataLabel="@Localizer.Text(LanguageTexts.DisplayName.Label)">@context.DisplayName</MudTd>
-                <MudTd DataLabel="@Localizer.Text(LanguageTexts.Direction.Label)">@Localizer.Text(context.IsRightToLeft ? LanguageUiTexts.RightToLeft : LanguageUiTexts.LeftToRight)</MudTd>
+                <MudTd DataLabel="@Localizer.Text(LanguageTexts.Direction.Label)">@Localizer.Text(LanguageTexts.DirectionValues.For(context.IsRightToLeft ? LanguageDirection.RightToLeft : LanguageDirection.LeftToRight))</MudTd>
                 <MudTd DataLabel="@Localizer.Text(LanguageTexts.Status.Label)">@Localizer.Text(LanguageLabels.Status(context.Status))</MudTd>
             </RowTemplate>
             <RowCommands>

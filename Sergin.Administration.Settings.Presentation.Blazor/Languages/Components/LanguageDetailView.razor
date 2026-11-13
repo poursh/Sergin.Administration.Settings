@@ -28,7 +28,7 @@
             <SerginDetailField LabelText="LanguageTexts.Direction.Label">
                 <MudSelect T="LanguageDirection" Value="language.Direction" ValueChanged="SetDirectionAsync" Disabled="busy"
                            ToStringFunc="@(direction => Localizer.Text(LanguageLabels.Direction(direction)))"
-                           HelperText="@Localizer.Text(language.IsRightToLeft ? LanguageUiTexts.RightToLeft : LanguageUiTexts.LeftToRight)"
+                           HelperText="@Localizer.Text(LanguageTexts.DirectionValues.For(language.IsRightToLeft ? LanguageDirection.RightToLeft : LanguageDirection.LeftToRight))"
                            Variant="Variant.Outlined" Margin="Margin.Dense" aria-label="@Localizer.Text(LanguageTexts.Direction.Label)">
                     @foreach (LanguageDirection direction in LanguageLabels.Directions)
                     {

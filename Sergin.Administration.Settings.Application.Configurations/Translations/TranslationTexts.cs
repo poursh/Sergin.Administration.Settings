@@ -1,3 +1,4 @@
+using Sergin.Administration.Settings.Application.Contracts.Translations.Commands.GetList;
 using Sergin.SharedKernel.Application.Localizations;
 
 namespace Sergin.Administration.Settings.Application.Configurations.Translations;
@@ -28,6 +29,16 @@ public static class TranslationTexts
     public static readonly FieldText Status = Category.Field("Status", "Status");
 
     public static readonly FieldText Origin = Category.Field("Origin", "Type");
+
+    public static readonly EnumTexts<TranslationStatus> StatusValues = Category.Values(
+        (TranslationStatus.Untranslated, "Untranslated", "No translation yet: the English default is shown."),
+        (TranslationStatus.Translated, "Translated", null),
+        (TranslationStatus.NeedsReview, "Needs review", "The English default changed after this was translated."),
+        (TranslationStatus.Orphaned, "Orphaned", "The text no longer exists in the application; the translation is never shown."));
+
+    public static readonly EnumTexts<TextOrigin> OriginValues = Category.Values(
+        (TextOrigin.Ui, "Screens", "Texts the pages show: titles, buttons, confirmations, menus."),
+        (TextOrigin.Application, "Messages", "Field names, validation messages and error messages."));
 
     public static readonly TextDefinition Singular = Category.Text("Singular", "Translation");
 

@@ -115,8 +115,8 @@ public sealed partial class LanguageDetailView
         null => string.Empty,
         { Direction: LanguageDirection.FromCulture } => Localizer.Text(LanguageUiTexts.DirectionResolved, new
         {
-            Setting = Localizer.Text(LanguageUiTexts.FromCulture),
-            Resolved = Localizer.Text(language.IsRightToLeft ? LanguageUiTexts.RightToLeft : LanguageUiTexts.LeftToRight),
+            Setting = Localizer.Text(LanguageTexts.DirectionValues.For(LanguageDirection.FromCulture)),
+            Resolved = Localizer.Text(LanguageTexts.DirectionValues.For(language.IsRightToLeft ? LanguageDirection.RightToLeft : LanguageDirection.LeftToRight)),
         }),
         _ => Localizer.Text(LanguageLabels.Direction(language.Direction)),
     };

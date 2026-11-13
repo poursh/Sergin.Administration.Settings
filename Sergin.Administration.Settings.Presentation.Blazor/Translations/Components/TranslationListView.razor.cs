@@ -110,16 +110,9 @@ public sealed partial class TranslationListView
         modules = [.. Catalog.Entries.Select(entry => entry.Module).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal)];
     }
 
-    private static TextDefinition StatusText(TranslationStatus status) => status switch
-    {
-        TranslationStatus.Translated => TranslationUiTexts.Translated,
-        TranslationStatus.NeedsReview => TranslationUiTexts.NeedsReview,
-        TranslationStatus.Orphaned => TranslationUiTexts.Orphaned,
-        _ => TranslationUiTexts.Untranslated,
-    };
+    private static TextDefinition StatusText(TranslationStatus status) => TranslationTexts.StatusValues.For(status);
 
-    private static TextDefinition OriginText(TextOrigin origin) =>
-        origin == TextOrigin.Ui ? TranslationUiTexts.Screens : TranslationUiTexts.Messages;
+    private static TextDefinition OriginText(TextOrigin origin) => TranslationTexts.OriginValues.For(origin);
 
     private static Color StatusColor(TranslationStatus status) => status switch
     {
