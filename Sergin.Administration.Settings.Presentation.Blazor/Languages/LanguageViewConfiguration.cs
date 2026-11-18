@@ -10,7 +10,8 @@ using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Se
 using Sergin.Administration.Settings.Application.Contracts.Languages.Commands.Unpublish;
 using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.Administration.Settings.Presentation.Blazor.Languages.Components;
-using Sergin.SharedKernel.Presentation.Blazor.Aggregates;
+using Sergin.SharedKernel.Presentation.Blazor.Aggregates.Configuration;
+using Sergin.SharedKernel.Presentation.Blazor.Aggregates.Model;
 
 namespace Sergin.Administration.Settings.Presentation.Blazor.Languages;
 

@@ -4,7 +4,8 @@ using Sergin.Administration.Settings.Application.Contracts.Translations.Commands
 using Sergin.Administration.Settings.Domain.Languages;
 using Sergin.Administration.Settings.Domain.Translations;
 using Sergin.Administration.Settings.Presentation.Blazor.Translations.Components;
-using Sergin.SharedKernel.Presentation.Blazor.Aggregates;
+using Sergin.SharedKernel.Presentation.Blazor.Aggregates.Configuration;
+using Sergin.SharedKernel.Presentation.Blazor.Aggregates.Model;
 
 namespace Sergin.Administration.Settings.Presentation.Blazor.Translations;
 
