@@ -1,7 +1,7 @@
 using MudBlazor;
 using Sergin.Administration.Settings.Application.Configurations.Languages;
 using Sergin.SharedKernel.Modules;
-using Sergin.SharedKernel.Presentation.Blazor.Modules;
+using Sergin.SharedKernel.Presentation.Blazor.Navigation;
 
 namespace Sergin.Administration.Settings.Presentation.Blazor;
 
