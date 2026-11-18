@@ -14,6 +14,7 @@ using Sergin.SharedKernel.Application.Concurrency;
 using Sergin.SharedKernel.Application.Securities.Authorization;
 using Sergin.SharedKernel.Domain;
 using Sergin.SharedKernel.Presentation.Blazor.Errors;
+using Sergin.SharedKernel.Presentation.Blazor.Dialogs;
 
 namespace Sergin.Administration.Settings.Presentation.Blazor.Translations.Components;
 
